@@ -62,6 +62,7 @@ int main(int argc, char** argv) {
     }
   }
   double sum_ = 0;
+  
   for (int i = 0; i < 8; i++) sum_ += sum[i];
   printf("time to read           = %8.2f s    ", t.toc());
   printf("bandwidth = %8.2f GB/s\n", n * repeat * sizeof(double) / 1e9 / t.toc());

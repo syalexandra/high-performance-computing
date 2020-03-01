@@ -27,7 +27,7 @@ void init_arrays(double* x, double* y, long N) {
 double compute_dot_prod(double* x, double* y, long N, long repeat) {
   double dot_prod = 0;
   for (long k = 0; k < repeat; k++) {
-    for (long i = 0; i <= N; i++) {
+    for (long i = 0; i < N; i++) {
       dot_prod += x[i] * y[i];
     }
   }
@@ -53,7 +53,9 @@ int main(int argc, char** argv) {
   // Compute dot-product
   double dot_prod = compute_dot_prod(x, y, N, 10);
   printf("dot-product = %f\n", dot_prod);
-
+  
+  free(x);
+  free(y);
   return 0;
 }
 

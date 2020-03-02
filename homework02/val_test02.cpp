@@ -86,6 +86,10 @@ void junk_data ( )
 //  Copy some values.
 //  X = { 0, 1, ?c, 3, 4, ?b, ?b, ?c, ?d, ?e }.
 //
+  for(i=5;i<10;i++)
+  {
+     x[i]=0;
+  }
   x[2] = x[7];
   x[5] = x[6];
 //

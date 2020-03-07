@@ -2,11 +2,11 @@
 
 #include <stdio.h>
 #include <math.h>
-#include <omp.h>
+//#include <omp.h>
 #include "utils.h"
 
 #define BLOCK_SIZE 16
-
+using namespace std;
 // Note: matrices are stored in column major order; i.e. the array elements in
 // the (m x n) matrix C are stored in the sequence: {C_00, C_10, ..., C_m0,
 // C_01, C_11, ..., C_m1, C_02, ..., C_0n, C_1n, ..., C_mn}
@@ -26,6 +26,45 @@ void MMult0(long m, long n, long k, double *a, double *b, double *c) {
 
 void MMult1(long m, long n, long k, double *a, double *b, double *c) {
   // TODO: See instructions below
+    double CBlock[BLOCK_SIZE*BLOCK_SIZE];
+    double ABlock[BLOCK_SIZE*BLOCK_SIZE];
+    double BBlock[BLOCK_SIZE*BLOCK_SIZE];
+    for (long i=0;i<m;i+=BLOCK_SIZE){
+        for (long j=0;j<n;j+=BLOCK_SIZE){
+            
+            for(int ii=0;ii<BLOCK_SIZE;ii++){
+                for(int jj=0;jj<BLOCK_SIZE;jj++){
+                    CBlock[ii+jj*BLOCK_SIZE]=c[(i+ii)+(j+jj)*n];
+                }
+            }
+                    
+                    
+            for(long p=0;p<k;p+=BLOCK_SIZE){
+                
+                for(int ii=0;ii<BLOCK_SIZE;ii++){
+                    for(int jj=0;jj<BLOCK_SIZE;jj++){
+                        ABlock[ii+jj*BLOCK_SIZE]=a[(i+ii)+(p+jj)*k];
+                        BBlock[ii+jj*BLOCK_SIZE]=b[(p+ii)+(j+jj)*n];
+                    }
+                }
+                
+                for(int ii=0;ii<BLOCK_SIZE;ii++){
+                    for(int jj=0;jj<BLOCK_SIZE;jj++){
+                        for(int pp=0;pp<BLOCK_SIZE;pp++){
+                            CBlock[ii+jj*BLOCK_SIZE]+=ABlock[ii+pp*BLOCK_SIZE]*BBlock[pp+jj*BLOCK_SIZE];
+                        }
+                    }
+                }
+                
+            }
+            for(int ii=0;ii<BLOCK_SIZE;ii++){
+                for(int jj=0;jj<BLOCK_SIZE;jj++){
+                    c[(i+ii)+(j+jj)*n]=CBlock[ii+jj*BLOCK_SIZE];
+                }
+            }
+            
+        }
+    }
 }
 
 int main(int argc, char** argv) {
@@ -47,20 +86,24 @@ int main(int argc, char** argv) {
     for (long i = 0; i < k*n; i++) b[i] = drand48();
     for (long i = 0; i < m*n; i++) c_ref[i] = 0;
     for (long i = 0; i < m*n; i++) c[i] = 0;
-
+    
+    
     for (long rep = 0; rep < NREPEATS; rep++) { // Compute reference solution
       MMult0(m, n, k, a, b, c_ref);
     }
+    
 
     Timer t;
     t.tic();
     for (long rep = 0; rep < NREPEATS; rep++) {
       MMult1(m, n, k, a, b, c);
     }
+    
+      
     double time = t.toc();
-    double flops = 0; // TODO: calculate from m, n, k, NREPEATS, time
-    double bandwidth = 0; // TODO: calculate from m, n, k, NREPEATS, time
-    printf("%10d %10f %10f %10f", p, time, flops, bandwidth);
+    double flops = 2*m*n*k*NREPEATS/time/1e9; // TODO: calculate from m, n, k, NREPEATS, time
+    double bandwidth =2*m*n*(1+k/BLOCK_SIZE)*NREPEATS/time/1e9 ; // TODO: calculate from m, n, k, NREPEATS, time
+    printf("%10d %10f %10f %10f", p,time, flops, bandwidth);
 
     double max_err = 0;
     for (long i = 0; i < m*n; i++) max_err = std::max(max_err, fabs(c[i] - c_ref[i]));

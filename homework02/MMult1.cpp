@@ -24,6 +24,25 @@ void MMult0(long m, long n, long k, double *a, double *b, double *c) {
   }
 }
 
+
+void MMult_parallel(long m, long n, long k, double *a, double *b, double *c) {
+#pragma omp parallel
+{
+#pragma omp for
+  for (long j = 0; j < n; j++) {
+    for (long p = 0; p < k; p++) {
+      for (long i = 0; i < m; i++) {
+        double A_ip = a[i+p*m];
+        double B_pj = b[p+j*k];
+        double C_ij = c[i+j*m];
+        C_ij = C_ij + A_ip * B_pj;
+        c[i+j*m] = C_ij;
+      }
+    }
+  }
+}
+}
+
 void MMult1(long m, long n, long k, double *a, double *b, double *c) {
   // TODO: See instructions below
     double CBlock[BLOCK_SIZE*BLOCK_SIZE];
@@ -72,7 +91,7 @@ int main(int argc, char** argv) {
   const long PLAST = 2000;
   const long PINC = std::max(50/BLOCK_SIZE,1) * BLOCK_SIZE; // multiple of BLOCK_SIZE
 
-  printf(" Dimension       Time    Gflop/s       GB/s        Error\n");
+  printf(" Dimension       Time    Gflop/s       GB/s        Error   Error2      Reference_Time      Openmp_Time\n");
   for (long p = PFIRST; p < PLAST; p += PINC) {
     long m = p, n = p, k = p;
     long NREPEATS = 1e9/(m*n*k)+1;
@@ -80,38 +99,55 @@ int main(int argc, char** argv) {
     double* b = (double*) aligned_malloc(k * n * sizeof(double)); // k x n
     double* c = (double*) aligned_malloc(m * n * sizeof(double)); // m x n
     double* c_ref = (double*) aligned_malloc(m * n * sizeof(double)); // m x n
-
+    double* c_parallel = (double*) aligned_malloc(m * n * sizeof(double)); // m x n
     // Initialize matrices
     for (long i = 0; i < m*k; i++) a[i] = drand48();
     for (long i = 0; i < k*n; i++) b[i] = drand48();
     for (long i = 0; i < m*n; i++) c_ref[i] = 0;
     for (long i = 0; i < m*n; i++) c[i] = 0;
     
-    
+    Timer t;
+    t.tic();
     for (long rep = 0; rep < NREPEATS; rep++) { // Compute reference solution
       MMult0(m, n, k, a, b, c_ref);
     }
+    double time_ref=t.toc();
     
-
-    Timer t;
+    t.tic();
+    for (long rep = 0; rep < NREPEATS; rep++) { // Compute reference solution
+        MMult_parallel(m, n, k, a, b, c_parallel);
+    }
+    double time_parallel=t.toc();
+    
+    
     t.tic();
     for (long rep = 0; rep < NREPEATS; rep++) {
       MMult1(m, n, k, a, b, c);
     }
     
-      
     double time = t.toc();
+      
     double flops = 2*m*n*k*NREPEATS/time/1e9; // TODO: calculate from m, n, k, NREPEATS, time
     double bandwidth =2*m*n*(1+k/BLOCK_SIZE)*NREPEATS/time/1e9 ; // TODO: calculate from m, n, k, NREPEATS, time
     printf("%10d %10f %10f %10f", p,time, flops, bandwidth);
-
+    
     double max_err = 0;
     for (long i = 0; i < m*n; i++) max_err = std::max(max_err, fabs(c[i] - c_ref[i]));
-    printf(" %10e\n", max_err);
-
+    printf(" %10e", max_err);
+      
+    max_err = 0;
+    for (long i = 0; i < m*n; i++) max_err = std::max(max_err, fabs(c_parallel[i] - c_ref[i]));
+    printf(" %10e", max_err);
+      
+    printf("%10f %10f \n", time_ref,time_parallel);
+    
+     
+    
     aligned_free(a);
     aligned_free(b);
     aligned_free(c);
+    aligned_free(c_ref);
+    aligned_free(c_parallel);
   }
 
   return 0;

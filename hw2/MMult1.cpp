@@ -86,12 +86,14 @@ void MMult1(long m, long n, long k, double *a, double *b, double *c) {
     }
 }
 
+
+
 int main(int argc, char** argv) {
   const long PFIRST = BLOCK_SIZE;
   const long PLAST = 2000;
   const long PINC = std::max(50/BLOCK_SIZE,1) * BLOCK_SIZE; // multiple of BLOCK_SIZE
 
-  printf(" Dimension       Time    Gflop/s       GB/s        Error   Error2      Reference_Time      Openmp_Time\n");
+  printf(" Dimension       Blocking_Time    Blocking_Gflop/s       Blocking_GB/s        Error   Error2      Reference_Time      Openmp_Time\n");
   for (long p = PFIRST; p < PLAST; p += PINC) {
     long m = p, n = p, k = p;
     long NREPEATS = 1e9/(m*n*k)+1;
@@ -100,11 +102,13 @@ int main(int argc, char** argv) {
     double* c = (double*) aligned_malloc(m * n * sizeof(double)); // m x n
     double* c_ref = (double*) aligned_malloc(m * n * sizeof(double)); // m x n
     double* c_parallel = (double*) aligned_malloc(m * n * sizeof(double)); // m x n
+      
     // Initialize matrices
     for (long i = 0; i < m*k; i++) a[i] = drand48();
     for (long i = 0; i < k*n; i++) b[i] = drand48();
     for (long i = 0; i < m*n; i++) c_ref[i] = 0;
     for (long i = 0; i < m*n; i++) c[i] = 0;
+    for (long i = 0; i < m*n; i++) c_parallel[i] = 0;
     
     Timer t;
     t.tic();
@@ -114,7 +118,7 @@ int main(int argc, char** argv) {
     double time_ref=t.toc();
     
     t.tic();
-    for (long rep = 0; rep < NREPEATS; rep++) { // Compute reference solution
+    for (long rep = 0; rep < NREPEATS; rep++) {
         MMult_parallel(m, n, k, a, b, c_parallel);
     }
     double time_parallel=t.toc();
@@ -125,11 +129,11 @@ int main(int argc, char** argv) {
       MMult1(m, n, k, a, b, c);
     }
     
-    double time = t.toc();
+    double time_block = t.toc();
       
-    double flops = 2*m*n*k*NREPEATS/time/1e9; // TODO: calculate from m, n, k, NREPEATS, time
-    double bandwidth =2*m*n*(1+k/BLOCK_SIZE)*NREPEATS/time/1e9 ; // TODO: calculate from m, n, k, NREPEATS, time
-    printf("%10d %10f %10f %10f", p,time, flops, bandwidth);
+    double flops = 2*m*n*k*NREPEATS/time_block/1e9; // TODO: calculate from m, n, k, NREPEATS, time
+    double bandwidth =2*m*n*(1+k/BLOCK_SIZE)*NREPEATS/time_block/1e9 ; // TODO: calculate from m, n, k, NREPEATS, time
+    printf("%10d %10f %10f %10f", p,time_block, flops, bandwidth);
     
     double max_err = 0;
     for (long i = 0; i < m*n; i++) max_err = std::max(max_err, fabs(c[i] - c_ref[i]));
@@ -139,7 +143,7 @@ int main(int argc, char** argv) {
     for (long i = 0; i < m*n; i++) max_err = std::max(max_err, fabs(c_parallel[i] - c_ref[i]));
     printf(" %10e", max_err);
       
-    printf("%10f %10f \n", time_ref,time_parallel);
+    printf("%10f %10f\n", time_ref,time_parallel);
     
      
     

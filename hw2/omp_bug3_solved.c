@@ -34,7 +34,8 @@ for (i=0; i<N; i++)
   printf("Thread %d starting...\n",tid);
   #pragma omp barrier
 
-  #pragma omp sections nowait
+  //add the parallel before sections
+  #pragma omp parallel sections
     {
     #pragma omp section
       {

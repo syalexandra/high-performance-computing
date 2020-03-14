@@ -9,6 +9,7 @@
 #include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 #define N 1000000
 #define PI 3.1415926535
 #define DELTA .01415926535
@@ -45,12 +46,13 @@ omp_init_lock(&lockb);
       omp_set_lock(&locka);
       for (i=0; i<N; i++)
         a[i] = i * DELTA;
+      //change the lock to this location to avoid the deadlock
+      omp_unset_lock(&locka);
       omp_set_lock(&lockb);
       printf("Thread %d adding a[] to b[]\n",tid);
       for (i=0; i<N; i++)
         b[i] += a[i];
       omp_unset_lock(&lockb);
-      omp_unset_lock(&locka);
       }
 
     #pragma omp section
@@ -59,12 +61,13 @@ omp_init_lock(&lockb);
       omp_set_lock(&lockb);
       for (i=0; i<N; i++)
         b[i] = i * PI;
+      //change the lock to this location to avoid the deadlock
+      omp_unset_lock(&lockb);
       omp_set_lock(&locka);
       printf("Thread %d adding b[] to a[]\n",tid);
       for (i=0; i<N; i++)
         a[i] += b[i];
       omp_unset_lock(&locka);
-      omp_unset_lock(&lockb);
       }
     }  /* end of sections */
   }  /* end of parallel region */

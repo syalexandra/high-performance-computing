@@ -7,8 +7,8 @@ All:
 	g++ -fopenmp omp_bug4_solved.c -o omp_bug4_solved
 	g++ -fopenmp omp_bug5_solved.c -o omp_bug5_solved
 	g++ -fopenmp omp_bug6_solved.c -o omp_bug6_solved
-	g++ -fopenmp gs2D-omp.cpp -o gs2D-omp
-	g++ -fopenmp jacobi2D-omp.cpp -o jacobi2D-omp
+	g++ -fopenmp -O3 gs2D-omp.cpp -o gs2D-omp
+	g++ -fopenmp -O3 jacobi2D-omp.cpp -o jacobi2D-omp
 
 
 

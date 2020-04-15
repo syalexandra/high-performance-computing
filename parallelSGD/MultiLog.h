@@ -42,7 +42,7 @@ public:
             for(int j=0;j<size_data;j++){
                 
                 prob+=weight[i*size_data+j]*data[i*size_data+j];
-                if(isnan(prob)){printf("%d,%d,%f,%f",i,j,weight[i*size_data+j],data[i*size_data+j]);exit(1);}
+                //if(isnan(prob)){printf("%d,%d,%f,%f",i,j,weight[i*size_data+j],data[i*size_data+j]);exit(1);}
                 
             }
             

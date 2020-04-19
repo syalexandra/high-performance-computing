@@ -68,8 +68,8 @@ void Check_CUDA_Error(const char *message){
 
 int main() {
 
-    long N= (1UL<<20)
-    long M= (1UL<<10)
+    long N= (1UL<<20);
+    long M= (1UL<<10);
     
     double *x, *y, *z;
     

@@ -44,7 +44,8 @@ void vec_inner_product_kernel(double* c,const double* a, const double* b){
 }
 
 
-__global__ void reduction_kernel0(double* sum, const double* a, long N){
+__global__
+void reduction_kernel0(double* sum, const double* a, long N){
   __shared__ double smem[BLOCK_SIZE];
   int idx = (blockIdx.x) * blockDim.x + threadIdx.x;
 
@@ -113,10 +114,10 @@ int main() {
     long Nb = (N+BLOCK_SIZE-1)/(BLOCK_SIZE);
     reduction_kernel0<<<Nb,BLOCK_SIZE>>>(s, z, N);
     while (Nb > 1) {
-      long N = Nb;
+      long N_temp = Nb;
       Nb = (Nb+BLOCK_SIZE-1)/(BLOCK_SIZE);
-      reduction_kernel0<<<Nb,BLOCK_SIZE>>>(s + N, s, N);
-      s += N;
+      reduction_kernel0<<<Nb,BLOCK_SIZE>>>(s + N_temp, s, N_temp);
+      s += N_temp;
     }
     
     

@@ -10,7 +10,7 @@
 #include <omp.h>
 #include <string>
 
-#define N (1UL<<10)
+#define N (1UL<<25)
 #define BLOCK_SIZE 1024
 
 
@@ -109,7 +109,8 @@ int main() {
     
     
     long N_work = 1;
-    for (long i = (N+BLOCK_SIZE-1)/(BLOCK_SIZE); i > 1; i = (i+BLOCK_SIZE-1)/(BLOCK_SIZE)){N_work += i;}
+    
+    //for (long i = (N+BLOCK_SIZE-1)/(BLOCK_SIZE); i > 1; i = (i+BLOCK_SIZE-1)/(BLOCK_SIZE)){N_work += i;printf("%ld",N_work);}
     //printf("%ld",N_work);
     /*
     cudaMalloc(&s, N_work*sizeof(double));

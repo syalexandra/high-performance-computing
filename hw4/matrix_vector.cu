@@ -10,11 +10,11 @@
 #include <omp.h>
 #include <string>
 
-#define N (1UL<<15)
-#define M (1UL<<10)
+#define N (1UL<<20)
+#define M (1UL<<15)
 
-#define BLOCK_SIZE (1UL<<10)
-#define GRID_SIZE (1UL<<10)
+#define BLOCK_SIZE (1UL<<15)
+#define GRID_SIZE (1UL<<15)
 
 void vec_mat_product(double* c, const double* a, const double* b){
     
@@ -100,7 +100,7 @@ int main() {
     
     double tt = omp_get_wtime();
     vec_mat_product(z_ref, x, y);
-    printf("CPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
+    printf("CPU Bandwidth = %f GB/s\n", (N+2)*M*sizeof(double) / (omp_get_wtime()-tt)/1e9);
     
     
 
@@ -115,7 +115,7 @@ int main() {
     cudaDeviceSynchronize();
     
     cudaMemcpy(z, z_d, N*sizeof(double), cudaMemcpyDeviceToHost);
-    printf("GPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
+    printf("GPU Bandwidth = %f GB/s\n", (N+2)*M*sizeof(double) / (omp_get_wtime()-tt)/1e9);
     
     double err=0;
     for (long i = 0; i < N; i++) err += fabs(z[i]-z_ref[i]);

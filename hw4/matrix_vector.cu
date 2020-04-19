@@ -73,10 +73,10 @@ int main() {
     
     double *x, *y, *z;
     
-    cudaMallocManaged(&x, N * M * sizeof(double));
-    cudaMallocManaged(&y, M * sizeof(double));
-    cudaMallocManaged(&z, N * sizeof(double));
     
+    double* x = (double*) malloc(N*M * sizeof(double));
+    double* y = (double*) malloc(M * sizeof(double));
+    double* z = (double*) malloc(N * sizeof(double));
     double* z_ref = (double*) malloc(N * sizeof(double));
     
     #pragma omp parallel for schedule(static)
@@ -92,6 +92,16 @@ int main() {
     }
     
     
+    
+    double *x_d, *y_d, *z_d;
+    cudaMalloc(&x_d, N * M * sizeof(double));
+    cudaMalloc(&y_d, M * sizeof(double));
+    cudaMalloc(&z_d, N * sizeof(double));
+    
+    
+    
+    
+    
     double tt = omp_get_wtime();
     vec_mat_product(z_ref, x, y, N);
     printf("CPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
@@ -99,12 +109,16 @@ int main() {
     
 
     tt = omp_get_wtime();
+    
+    cudaMemcpy(x_d, x, N*M*sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(y_d, y, N*sizeof(double), cudaMemcpyHostToDevice);
+    
     dim3 dimGrid(N/GRID_SIZE,GRID_SIZE);
     dim3 dimBlock(M/BLOCK_SIZE,BLOCK_SIZE);
-    
-    vec_mat_product_kernel<<<dimGrid,dimBlock>>>(z,x,y,N,M);
+    vec_mat_product_kernel<<<dimGrid,dimBlock>>>(z_d,x_d,y_d,N,M);
     cudaDeviceSynchronize();
     
+    cudaMemcpy(z, z_d, N*sizeof(double), cudaMemcpyDeviceToHost);
     printf("GPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
     
     double err=0;

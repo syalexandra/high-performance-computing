@@ -112,8 +112,9 @@ int main() {
     cudaMalloc(&s, N_work*sizeof(double));
     
     long Nb = (N+BLOCK_SIZE-1)/(BLOCK_SIZE);
-    reduction_kernel0<<<Nb,BLOCK_SIZE>>>(s, z, N);
     /*
+    reduction_kernel0<<<Nb,BLOCK_SIZE>>>(s, z, N);
+    
     while (Nb > 1) {
       long N_temp = Nb;
       Nb = (Nb+BLOCK_SIZE-1)/(BLOCK_SIZE);
@@ -125,10 +126,10 @@ int main() {
     printf("GPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
     
     
-    double err = 0;
+    //double err = 0;
     //for (long i = 0; i < N; i++) err += fabs(z[i]-z_ref[i]);
-    err=s_ref-s;
-    printf("Error = %f %f %f\n", err,s_ref,s);
+    //err=s_ref-s;
+    //printf("Error = %f %f %f\n", err,s_ref,s);
     
     
     

@@ -104,8 +104,8 @@ int main() {
     
 
     tt = omp_get_wtime();
-    vec_inner_product_kernel<<<N/1024+1,1024>>>(z,x, y);
-    cudaDeviceSynchronize();
+    //vec_inner_product_kernel<<<N/1024+1,1024>>>(z,x, y);
+    //cudaDeviceSynchronize();
     
     
     long N_work = 1;

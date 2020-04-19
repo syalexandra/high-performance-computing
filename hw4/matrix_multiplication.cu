@@ -80,7 +80,7 @@ int main() {
     tt = omp_get_wtime();
     vec_inner_product_kernel<<<N/1024+1,1024>>>(z,s, x, y);
     
-    cudaDeviceSynchronize();
+    //cudaDeviceSynchronize();
     printf("GPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
     
     

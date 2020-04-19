@@ -107,9 +107,10 @@ int main() {
     vec_inner_product_kernel<<<N/1024+1,1024>>>(z,x, y);
     cudaDeviceSynchronize();
     
+    /*s
     long N_work = 1;
     for (long i = (N+BLOCK_SIZE-1)/(BLOCK_SIZE); i > 1; i = (i+BLOCK_SIZE-1)/(BLOCK_SIZE)) N_work += i;
-    /*
+    
     cudaMalloc(&s, N_work*sizeof(double));
     
     long Nb = (N+BLOCK_SIZE-1)/(BLOCK_SIZE);

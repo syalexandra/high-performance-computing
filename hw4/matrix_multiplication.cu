@@ -110,7 +110,7 @@ int main() {
     
     long N_work = 1;
     
-    //for (long i = (N+BLOCK_SIZE-1)/(BLOCK_SIZE); i > 1; i = (i+BLOCK_SIZE-1)/(BLOCK_SIZE)){N_work += i;printf("%ld",N_work);}
+    for (long i = (N+BLOCK_SIZE-1)/(BLOCK_SIZE); i > 1; i = (i+BLOCK_SIZE-1)/(BLOCK_SIZE)){N_work += i;printf("%ld",N_work);}
     //printf("%ld",N_work);
     /*
     cudaMalloc(&s, N_work*sizeof(double));

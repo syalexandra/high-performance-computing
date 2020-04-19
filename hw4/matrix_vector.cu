@@ -10,8 +10,6 @@
 #include <omp.h>
 #include <string>
 
-#define N (1UL<<25)
-#define BLOCK_SIZE 1024
 
 void vec_inner_product(double* c, const double* a, const double* b){
     double temp=0;
@@ -71,32 +69,37 @@ void Check_CUDA_Error(const char *message){
 
 int main() {
 
-    double *x, *y, *z, *s;
-    cudaMallocManaged(&x, N * sizeof(double));
-    cudaMallocManaged(&y, N * sizeof(double));
-    cudaMallocManaged(&s, BLOCK_SIZE * sizeof(double));
+    #define N (1UL<<15)
+    #define M (1UL<<10)
     
-    //cudaMallocManaged(&s, N * sizeof(double));
+    double *x, *y, *z;
     
-    double* s_ref;
+    cudaMallocManaged(&x, N * M * sizeof(double));
+    cudaMallocManaged(&y, M * sizeof(double));
+    cudaMallocManaged(&z, N * sizeof(double));
     
     
     #pragma omp parallel for schedule(static)
-    for (long i = 0; i < N; i++)
+    for (long i = 0; i < N*M; i++)
     {
       x[i] = i+2;
-      y[i] = 1.0/(i+1);
+    }
+    
+    #pragma omp parallel for schedule(static)
+    for (long i = 0; i < M; i++)
+    {
+      y[i] = 1/(i+2);
     }
     
     
     
     double tt = omp_get_wtime();
-    vec_inner_product(s_ref,x, y);
+    vec_inner_product(z_ref,x, y);
     printf("CPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
     
 
     tt = omp_get_wtime();
-    vec_inner_product_kernel<<<N/BLOCK_SIZE+1,BLOCK_SIZE>>>(s,x,y);
+    vec_inner_product_kernel<<<N/BLOCK_SIZE+1,BLOCK_SIZE>>>(z,x,y);
     cudaDeviceSynchronize();
     
     float sum = 0;

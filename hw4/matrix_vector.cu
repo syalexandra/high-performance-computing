@@ -10,11 +10,13 @@
 #include <omp.h>
 #include <string>
 
+#define N (1UL<<20)
+#define M (1UL<<10)
 
 #define BLOCK_SIZE (1UL<<10)
 #define GRID_SIZE (1UL<<10)
 
-void vec_mat_product(double* c, const double* a, const double* b,const long N,const long M){
+void vec_mat_product(double* c, const double* a, const double* b){
     
     #pragma omp parallel for schedule(static)
     for (long i = 0; i < N; i++) {
@@ -31,7 +33,7 @@ void vec_mat_product(double* c, const double* a, const double* b,const long N,co
 
 
 __global__
-void vec_mat_product_kernel(double* c,const double* a, const double* b,const long N,const long M){
+void vec_mat_product_kernel(double* c,const double* a, const double* b){
 
 
     
@@ -67,10 +69,6 @@ void Check_CUDA_Error(const char *message){
 }
 
 int main() {
-
-    long N= (1UL<<20);
-    long M= (1UL<<10);
-    
     
     double* x = (double*) malloc(N*M * sizeof(double));
     double* y = (double*) malloc(M * sizeof(double));
@@ -101,7 +99,7 @@ int main() {
     
     
     double tt = omp_get_wtime();
-    vec_mat_product(z_ref, x, y, M,N);
+    vec_mat_product(z_ref, x, y);
     printf("CPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
     
     
@@ -113,7 +111,7 @@ int main() {
     
     dim3 dimGrid(N/GRID_SIZE,GRID_SIZE);
     dim3 dimBlock(M/BLOCK_SIZE,BLOCK_SIZE);
-    vec_mat_product_kernel<<<dimGrid,dimBlock>>>(z_d,x_d,y_d,N,M);
+    vec_mat_product_kernel<<<dimGrid,dimBlock>>>(z_d,x_d,y_d);
     cudaDeviceSynchronize();
     
     cudaMemcpy(z, z_d, N*sizeof(double), cudaMemcpyDeviceToHost);

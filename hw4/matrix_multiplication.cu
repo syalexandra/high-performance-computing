@@ -13,7 +13,6 @@
 #define N (1UL<<25)
 #define BLOCK_SIZE 1024
 
-
 void vec_inner_product(double* c, const double* a, const double* b){
     double temp=0;
     #pragma omp parallel for shared(temp)
@@ -30,38 +29,33 @@ void vec_inner_product(double* c, const double* a, const double* b){
 __global__
 void vec_inner_product_kernel(double* c,const double* a, const double* b){
 
+    __shared__ float chache[BLOCK_SIZE] ;
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx < N) c[idx] = a[idx] * b[idx];
+    int chacheindex = threadIdx.x;
+    double temp;
     
-    /*
-    __syncthreads();
-    if(0==idx){
-        for(int i=0;i<N;i++){
-            *sum+=c[i];
-        }
+    while ( tid < N )
+    {
+         temp += a[tid] * b[tid] ;
+         tid += blockDim.x * gridDim.x ;
     }
-    */
-}
+    
+    chache[chacheindex] = temp ;
 
+    __synchthreads ();
+    int i  = blockDim.x / 2;
+    while ( i!=0 )
+     {
+        if ( chacheindex < i )
+            chache[chacheindex] += chache [chacheindex + i] ;
+        
+        __synchthreads();
+        i/=2 ;
+     }
+     
+     if ( chacheindex == 0 )c[blockIdx.x] = chache [0] ;
 
-__global__
-void reduction_kernel0(double* sum, const double* a, long n){
-  __shared__ double smem[BLOCK_SIZE];
-  int idx = (blockIdx.x) * blockDim.x + threadIdx.x;
-
-  // each thread reads data from global into shared memory
-  if (idx < n) smem[threadIdx.x] = a[idx];
-  else smem[threadIdx.x] = 0;
-  __syncthreads();
-
-  for(int s = 1; s < blockDim.x; s *= 2) {
-      if(threadIdx.x % (2*s) == 0)
-          smem[threadIdx.x] += smem[threadIdx.x + s];
-      __syncthreads();
-  }
-
-  // write to global memory
-  if (threadIdx.x == 0) sum[blockIdx.x] = smem[threadIdx.x];
+    
 }
 
 
@@ -80,7 +74,8 @@ int main() {
     double *x, *y, *z, *s;
     cudaMallocManaged(&x, N * sizeof(double));
     cudaMallocManaged(&y, N * sizeof(double));
-    cudaMallocManaged(&z, N * sizeof(double));
+    cudaMallocManaged(&s, BLOCK_SIZE * sizeof(double));
+    
     //cudaMallocManaged(&s, N * sizeof(double));
     
     double* s_ref;
@@ -91,7 +86,6 @@ int main() {
     {
       x[i] = i+2;
       y[i] = 1.0/(i+1);
-      z[i] = 0;
     }
     
     
@@ -100,42 +94,22 @@ int main() {
     vec_inner_product(s_ref,x, y);
     printf("CPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
     
-    
-    
 
     tt = omp_get_wtime();
-    //vec_inner_product_kernel<<<N/1024+1,1024>>>(z,x, y);
-    //cudaDeviceSynchronize();
+    vec_inner_product_kernel<<<N/1024+1,1024>>>(s,x,y);
+    cudaDeviceSynchronize();
     
-    
-    long N_work = 1;
-    
-    for (long i = (N+BLOCK_SIZE-1)/(BLOCK_SIZE); i > 1; i = (i+BLOCK_SIZE-1)/(BLOCK_SIZE)) N_work += i;
-    
-    //printf("%ld",N_work);
-    /*
-    cudaMalloc(&s, N_work*sizeof(double));
-    
-    long Nb = (N+BLOCK_SIZE-1)/(BLOCK_SIZE);
-    
-    reduction_kernel0<<<Nb,BLOCK_SIZE>>>(s, z, N);
-    
-    while (Nb > 1) {
-      long N_temp = Nb;
-      Nb = (Nb+BLOCK_SIZE-1)/(BLOCK_SIZE);
-      reduction_kernel0<<<Nb,BLOCK_SIZE>>>(s + N_temp, s, N_temp);
-      s += N_temp;
-    }
-    
-    
+    float sum = 0;
+    for ( int i = 0 ; i<BLOCK_SIZE ; i++ )
+        sum+=s[i];
     printf("GPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
     
     
-    //double err = 0;
+    double err = 0;
     //for (long i = 0; i < N; i++) err += fabs(z[i]-z_ref[i]);
-    //err=s_ref-s;
-    //printf("Error = %f %f %f\n", err,s_ref,s);
+    err=s_ref-sum;
+    printf("Error = %f %f %f\n", err,s_ref,sum);
     
-    */
+    
     
 }

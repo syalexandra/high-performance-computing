@@ -10,7 +10,7 @@
 #include <omp.h>
 #include <string>
 
-#define N 1024
+#define N 2048
 #define M 1024
 
 #define BLOCK_SIZE 1024
@@ -119,6 +119,6 @@ int main() {
     
     double err=0;
     for (long i = 0; i < N; i++) err += fabs(z[i]-z_ref[i]);
-    
+    printf("error = %f ",err);
     
 }

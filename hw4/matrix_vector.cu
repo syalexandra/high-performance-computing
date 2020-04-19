@@ -10,11 +10,11 @@
 #include <omp.h>
 #include <string>
 
-#define N 2048
-#define M 1024
+#define N (1UL<<20)
+#define M (1UL<<10)
 
-#define BLOCK_SIZE 1024
-#define GRID_SIZE 1024
+#define BLOCK_SIZE (1UL<<10)
+#define GRID_SIZE (1UL<<10)
 
 void vec_mat_product(double* c, const double* a, const double* b){
     

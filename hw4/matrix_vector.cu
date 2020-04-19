@@ -71,8 +71,6 @@ int main() {
     long N= (1UL<<20);
     long M= (1UL<<10);
     
-    double *x, *y, *z;
-    
     
     double* x = (double*) malloc(N*M * sizeof(double));
     double* y = (double*) malloc(M * sizeof(double));

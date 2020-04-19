@@ -10,7 +10,9 @@
 #include <omp.h>
 #include <string>
 
-#define N (1UL<<25);
+#define N (1UL<<25)
+
+
 void vec_inner_product(double* c, const double* a, const double* b){
     double temp=0;
     #pragma omp parallel for schedule(static) shared(temp)

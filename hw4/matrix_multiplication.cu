@@ -10,7 +10,7 @@
 #include <omp.h>
 #include <string>
 
-#define N (1UL<<25)
+#define N (1UL<<10)
 #define BLOCK_SIZE 1024
 
 

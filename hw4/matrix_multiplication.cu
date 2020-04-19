@@ -109,10 +109,11 @@ int main() {
     
     long N_work = 1;
     for (long i = (N+BLOCK_SIZE-1)/(BLOCK_SIZE); i > 1; i = (i+BLOCK_SIZE-1)/(BLOCK_SIZE)) N_work += i;
+    /*
     cudaMalloc(&s, N_work*sizeof(double));
     
     long Nb = (N+BLOCK_SIZE-1)/(BLOCK_SIZE);
-    /*
+    
     reduction_kernel0<<<Nb,BLOCK_SIZE>>>(s, z, N);
     
     while (Nb > 1) {

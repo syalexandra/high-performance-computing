@@ -13,23 +13,23 @@
 #define N (1UL<<25)
 
 
-void vec_inner_product(double* c, const double* a, const double* b){
+double vec_inner_product(const double* a, const double* b){
     double temp=0;
-    #pragma omp parallel for schedule(static) shared(temp)
+    #pragma omp parallel for shared(temp)
     for (long i = 0; i < N; i++) {
         temp += a[i] * b[i];
     }
-    *c=temp;
+    return temp;
     
 }
 
 
 
 __global__
-void vec_inner_product_kernel(double* c, const double* a, const double* b){
-    __shared__ double temp[N];
+double vec_inner_product_kernel(double* c, const double* a, const double* b){
+
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx < N) temp[idx] = a[idx] * b[idx];
+    if (idx < N) c[idx] = a[idx] * b[idx];
     
     __syncthreads();
     if(0==idx){
@@ -37,8 +37,8 @@ void vec_inner_product_kernel(double* c, const double* a, const double* b){
         for(int i=0;i<N;i++){
             sum+=temp[i];
         }
-        *c=sum;
     }
+    return sum;
     
 }
 
@@ -58,30 +58,31 @@ int main() {
     double *x, *y, *z;
     cudaMallocManaged(&x, N * sizeof(double));
     cudaMallocManaged(&y, N * sizeof(double));
-    cudaMallocManaged(&z, sizeof(double));
+    cudaMallocManaged(&z, N * sizeof(double));
     
-    double* z_ref = (double*) malloc(sizeof(double));
+    //double* z_ref = (double*) malloc(N*sizeof(double));
+    
     #pragma omp parallel for schedule(static)
     for (long i = 0; i < N; i++)
     {
       x[i] = i+2;
       y[i] = 1.0/(i+1);
+      z[i] = 0.0;
     }
     
-    z[0]=0;
-    z_ref[0]=0;
     
     double tt = omp_get_wtime();
-    vec_inner_product(z_ref, x, y);
+    double s_ref=vec_inner_product(x, y);
     printf("CPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
 
     tt = omp_get_wtime();
-    vec_inner_product_kernel<<<N/1024+1,1024>>>(z, x, y);
+    double s=vec_inner_product_kernel<<<N/1024+1,1024>>>(z, x, y);
     cudaDeviceSynchronize();
     printf("GPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
     
     
     double err = 0;
-    for (long i = 0; i < N; i++) err += fabs(z[i]-z_ref[i]);
+    //for (long i = 0; i < N; i++) err += fabs(z[i]-z_ref[i]);
+    error=s_ref-s;
     printf("Error = %f\n", err);
 }

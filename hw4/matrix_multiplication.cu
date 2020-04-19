@@ -45,12 +45,12 @@ void vec_inner_product_kernel(double* c,const double* a, const double* b){
 
 
 __global__
-void reduction_kernel0(double* sum, const double* a, long N){
+void reduction_kernel0(double* sum, const double* a, long n){
   __shared__ double smem[BLOCK_SIZE];
   int idx = (blockIdx.x) * blockDim.x + threadIdx.x;
 
   // each thread reads data from global into shared memory
-  if (idx < N) smem[threadIdx.x] = a[idx];
+  if (idx < n) smem[threadIdx.x] = a[idx];
   else smem[threadIdx.x] = 0;
   __syncthreads();
 
@@ -126,6 +126,6 @@ int main() {
     
     double err = 0;
     //for (long i = 0; i < N; i++) err += fabs(z[i]-z_ref[i]);
-    err=*s_ref-*s;
-    printf("Error = %f\n", err);
+    err=s_ref-s;
+    printf("Error = %f %f %f\n", err,s_ref,s);
 }

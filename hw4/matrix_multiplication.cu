@@ -60,7 +60,7 @@ int main() {
     cudaMallocManaged(&z, N * sizeof(double));
     cudaMallocManaged(&s, sizeof(double));
     
-    double* z_ref = (double*) malloc(sizeof(double));
+    double* s_ref = (double*) malloc(sizeof(double));
     
     
     #pragma omp parallel for schedule(static)
@@ -70,11 +70,11 @@ int main() {
       y[i] = 1.0/(i+1);
       z[i] = 0;
     }
-    z_ref[0]=0;
+    s_ref[0]=0;
     s[0]=0;
     
     double tt = omp_get_wtime();
-    vec_inner_product(z_ref,x, y);
+    vec_inner_product(s_ref,x, y);
     printf("CPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
 
     tt = omp_get_wtime();
@@ -86,6 +86,6 @@ int main() {
     
     double err = 0;
     //for (long i = 0; i < N; i++) err += fabs(z[i]-z_ref[i]);
-    err=z_ref[0]-s[0];
+    err=s_ref[0]-s[0];
     printf("Error = %f\n", err);
 }

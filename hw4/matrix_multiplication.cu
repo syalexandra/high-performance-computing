@@ -74,7 +74,7 @@ int main() {
     s[0]=0;
     
     double tt = omp_get_wtime();
-    vec_inner_product(x, y);
+    vec_inner_product(z_ref,x, y);
     printf("CPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
 
     tt = omp_get_wtime();

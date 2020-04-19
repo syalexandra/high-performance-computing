@@ -14,7 +14,7 @@
 #define BLOCK_SIZE (1UL<<10)
 #define GRID_SIZE (1UL<<10)
 
-void vec_mat_product(double* c, const double* a, const double* b,long N,long M){
+void vec_mat_product(double* c, const double* a, const double* b,const long N,const long M){
     
     #pragma omp parallel for schedule(static)
     for (long i = 0; i < N; i++) {
@@ -31,7 +31,7 @@ void vec_mat_product(double* c, const double* a, const double* b,long N,long M){
 
 
 __global__
-void vec_mat_product_kernel(double* c,const double* a, const double* b,long N,long M){
+void vec_mat_product_kernel(double* c,const double* a, const double* b,const long N,const long M){
 
 
     
@@ -101,7 +101,7 @@ int main() {
     
     
     double tt = omp_get_wtime();
-    vec_mat_product(z_ref, x, y, N);
+    vec_mat_product(z_ref, x, y, M,N);
     printf("CPU Bandwidth = %f GB/s\n", 3*N*sizeof(double) / (omp_get_wtime()-tt)/1e9);
     
     

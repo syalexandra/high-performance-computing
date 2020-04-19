@@ -19,6 +19,7 @@ void vec_inner_product(double* c, const double* a, const double* b){
     for (long i = 0; i < N; i++) {
         temp += a[i] * b[i];
     }
+    
     *c=temp;
     
 }
@@ -34,7 +35,7 @@ void vec_inner_product_kernel(double* c, double *sum,const double* a, const doub
     __syncthreads();
     if(0==idx){
         for(int i=0;i<N;i++){
-            *sum+=temp[i];
+            *sum+=c[i];
         }
     }
     
@@ -53,7 +54,7 @@ void Check_CUDA_Error(const char *message){
 
 int main() {
 
-    double *x, *y, *z;
+    double *x, *y, *z,*s;
     cudaMallocManaged(&x, N * sizeof(double));
     cudaMallocManaged(&y, N * sizeof(double));
     cudaMallocManaged(&z, N * sizeof(double));
@@ -85,6 +86,6 @@ int main() {
     
     double err = 0;
     //for (long i = 0; i < N; i++) err += fabs(z[i]-z_ref[i]);
-    error=z_ref[0]-s[0];
+    err=z_ref[0]-s[0];
     printf("Error = %f\n", err);
 }

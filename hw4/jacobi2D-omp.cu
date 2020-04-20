@@ -140,7 +140,7 @@ int main(int argc, char ** argv) {
         }
     }
     
-    for(int i=0;i<(N+2)*(N+2);i++)cout<<x_d[i]<<" ";
+    //for(int i=0;i<(N+2)*(N+2);i++)cout<<x_d[i]<<" ";
     cout<<"cuda time: "<<t.toc()<<endl;
     
     free(x);

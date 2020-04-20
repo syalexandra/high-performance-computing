@@ -139,8 +139,8 @@ int main(int argc, char ** argv) {
             jacobiUpdate<<<GridDim,BlockDim>>>(x_d,x_next_d,f_d);
             cudaMemcpy(x, x_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
             
-            for(int i=0;i<=N;i++){
-                for(int j=0;j<=N;j++){
+            for(int i=0;i<=N+1;i++){
+                for(int j=0;j<=N+1;j++){
                     printf("%f ",x[i*(N+2)+j]);
                 }
                 printf("\n");
@@ -156,7 +156,7 @@ int main(int argc, char ** argv) {
                 }
             }
             
-            printf("norm = %f ",sqrt(norm));
+            printf("norm = %f \n",sqrt(norm));
             
         }
         else{

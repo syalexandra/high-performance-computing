@@ -146,14 +146,23 @@ int main(int argc, char ** argv) {
     
     cudaMemcpy(x, x_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
     cudaMemcpy(x_next, x_next_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
-    double error=0.0;
     
-    for(int i=1;i<(N+2)*(N+2);i++){
-        printf("%f,%f\n",x[i],x_next[i]);
-        error+=(x[i]-x_next[i])*(x[i]-x_next[i]);
+    
+    double h=1.0/(N+1);
+    double hsquare=h*h;
+    
+    norm=0;
+    
+    #pragma omp parallel for collapse(2) reduction (+:norm)
+    for(i=1;i<=N;i++){
+        
+        for(j=1;j<=N;j++){
+            norm+=pow((x[(i-1)*(N+2)+j]+x[i*(N+2)+j-1]+x[(i+1)*(N+2)+j]
+            +x[i*(N+2)+j+1]-4*x[i*(N+2)+j])/hsquare+f[i*(N+2)+j],2);
+        }
     }
     
-    printf("error = %f ",error);
+    printf("norm = %f ",sqrt(norm));
     
     free(x);
     free(f);

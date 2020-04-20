@@ -87,6 +87,17 @@ __gloabal__ void jacobiUpdate(double* x_old,double* x_new,double* f,long N){
 }
 
 
+inline cudaError_t checkCuda(cudaError_t result)
+{
+#if defined(DEBUG) || defined(_DEBUG)
+  if (result != cudaSuccess) {
+    fprintf(stderr, "CUDA Runtime Error: %s\n", cudaGetErrorString(result));
+    assert(result == cudaSuccess);
+  }
+#endif
+  return result;
+}
+
 int main(int argc, char ** argv) {
     // insert code here...
     
@@ -133,10 +144,10 @@ int main(int argc, char ** argv) {
     
     for(int i=0;i<5000;i++){
         if(i%2==0){
-            jacobiUpdate<<<BLOCKSIZE,BLOCK_SIZE>>>(x_d,x_next_d,f_d,N);
+            jacobiUpdate<<<GridDim,BlockDim>>>(x_d,x_next_d,f_d,N);
         }
         else{
-            jacobiUpdate<<<BLOCKSIZE,BLOCK_SIZE>>>(x_next_d,x_d,f_d,N);
+            jacobiUpdate<<<GridDim,BlockDim>>>(x_next_d,x_d,f_d,N);
         }
     }
     

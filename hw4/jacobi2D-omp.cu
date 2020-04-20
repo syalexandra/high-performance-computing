@@ -11,8 +11,8 @@
 #include "utils.h"
 using namespace std;
 
-#define BLOCK_SIZE 16//(1UL<<10)
-#define N 32//(1UL<<12)-2
+#define BLOCK_SIZE 32//(1UL<<10)
+#define N 128//(1UL<<12)-2
 
 
 void jacobian(double * u,double * f){
@@ -132,7 +132,7 @@ int main(int argc, char ** argv) {
     dim3 GridDim((N+2)/BLOCK_SIZE,(N+2)/BLOCK_SIZE);
     dim3 BlockDim(BLOCK_SIZE, BLOCK_SIZE);
     
-    for(int i=0;i<100;i++){
+    for(int i=0;i<1000;i++){
         if(i%2==0){
             jacobiUpdate<<<GridDim,BlockDim>>>(x_d,x_next_d,f_d);
         }

@@ -154,9 +154,9 @@ int main(int argc, char ** argv) {
     norm=0;
     
     #pragma omp parallel for collapse(2) reduction (+:norm)
-    for(i=1;i<=N;i++){
+    for(int i=1;i<=N;i++){
         
-        for(j=1;j<=N;j++){
+        for(int j=1;j<=N;j++){
             norm+=pow((x[(i-1)*(N+2)+j]+x[i*(N+2)+j-1]+x[(i+1)*(N+2)+j]
             +x[i*(N+2)+j+1]-4*x[i*(N+2)+j])/hsquare+f[i*(N+2)+j],2);
         }

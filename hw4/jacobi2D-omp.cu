@@ -153,7 +153,7 @@ int main(int argc, char ** argv) {
     
     double norm=0;
     
-    #pragma omp parallel for collapse(2) reduction (+:norm)
+    //#pragma omp parallel for collapse(2) reduction (+:norm)
     for(int i=1;i<=N;i++){
         
         for(int j=1;j<=N;j++){

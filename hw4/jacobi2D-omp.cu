@@ -11,8 +11,8 @@
 #include "utils.h"
 using namespace std;
 
-#define BLOCK_SIZE (1UL<<10)
-#define N (1UL<<12)-2
+#define BLOCK_SIZE 8//(1UL<<10)
+#define N 16//(1UL<<12)-2
 
 
 void jacobian(double * u,double * f){
@@ -81,6 +81,7 @@ __global__ void jacobiUpdate(double* x_old,double* x_new,double* f){
     
     if(x>0 && y>0 && x<=N && y<=N){
         x_new[x* (N+2)+ y]=(x_old[(x-1)* (N+2)+ y]+x_old[(x+1)*(N+2)+ y]+x_old[x*(N+2)+ y-1]+x_old[x*(N+2)+ y+1]+hsquare*f[x*(N+2)+y])/4.0;
+        printf("%d %d %f",x,y,x_old[(x-1)* (N+2)+ y]);
     }
     
 }

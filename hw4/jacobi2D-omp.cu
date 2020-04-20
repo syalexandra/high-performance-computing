@@ -11,9 +11,8 @@
 #include "utils.h"
 using namespace std;
 
-#define TILE_DIM 32
-#define N (1UL<<5)
-#define BLOCK_ROWS 8
+#define BLOCK_SIZE 32
+#define N 62
 
 
 void jacobian(double * u,double * f){
@@ -75,14 +74,14 @@ void jacobian(double * u,double * f){
 
 __global__ void jacobiUpdate(double* x_old,double* x_new,double* f){
     
-    int x = blockIdx.x * TILE_DIM + threadIdx.x;
-    int y = blockIdx.y * TILE_DIM + threadIdx.y;
+    int x = blockIdx.x * blockDim.x + threadIdx.x;
+    int y = blockIdx.y * blockDim.y + threadIdx.y;
     double h=1.0/(N+1);
     double hsquare=h*h;
     
-    int width = gridDim.x * TILE_DIM;
-    for (int j = 0; j < TILE_DIM; j+= BLOCK_ROWS)
-        x_new[(y+j)*width + x]=(x_old[(y+j)*width + x-1]+x_old[(y+j)*width + x+1]+x_old[(y+j-1)*width + x]+x_old[(y+j+1)*width + x]+hsquare*f[(y+j)*width + x])/4;
+    if(x>0 && y>0 && x<=N && y<=N){
+        x_new[x* (N+2)+ y]=(x_old[(x-1)* (N+2)+ y]+x_old[(x+1)*(N+2)+ y]+x_old[x*(N+2)+ y-1]+x_old[x*(N+2)+ y+1]+hsquare*f[x*(N+2)+y])/4;
+    }
     
 }
 
@@ -108,11 +107,10 @@ int main(int argc, char ** argv) {
     */
     
     
-    //double * x=(double*) malloc((N+2)*(N+2)*sizeof(double));
+    
     double * x_next=(double*) malloc((N+2)*(N+2)*sizeof(double));
     
     for(int i=0;i<(N+2)*(N+2);i++){
-        //x[i]=0;
         x_next[i]=0;
     }
     
@@ -130,8 +128,8 @@ int main(int argc, char ** argv) {
     cudaMemcpy(x_d, x, (N+2)*(N+2)* sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(f_d, f, (N+2)*(N+2)* sizeof(double), cudaMemcpyHostToDevice);
     
-    dim3 GridDim((N+2)/TILE_DIM,(N+2)/TILE_DIM);
-    dim3 BlockDim(TILE_DIM, BLOCK_ROWS);
+    dim3 GridDim((N+2)/BLOCK_SIZE,(N+2)/BLOCK_SIZE);
+    dim3 BlockDim(BLOCK_SIZE, BLOCK_SIZE);
     
     for(int i=0;i<5000;i++){
         if(i%2==0){

@@ -132,7 +132,7 @@ int main(int argc, char ** argv) {
     dim3 GridDim(BLOCK_SIZE,BLOCK_SIZE);//(N+2)/BLOCK_SIZE)
     dim3 BlockDim(BLOCK_SIZE, BLOCK_SIZE);
     
-    for(int i=0;i<1000;i++){
+    for(int i=0;i<100;i++){
         if(i%2==0){
             jacobiUpdate<<<GridDim,BlockDim>>>(x_d,x_next_d,f_d);
         }

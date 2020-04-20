@@ -11,8 +11,8 @@
 #include "utils.h"
 using namespace std;
 
-#define BLOCK_SIZE 64//(1UL<<10)
-#define N 1026//(1UL<<12)-2
+#define BLOCK_SIZE 16//(1UL<<10)
+#define N 32//(1UL<<12)-2
 
 
 void jacobian(double * u,double * f){
@@ -148,7 +148,7 @@ int main(int argc, char ** argv) {
     cudaMemcpy(x_next, x_next_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
     double error=0.0;
     
-    for(int i=(N+2)*(N+2)/2;i<(N+2)*(N+2);i++){
+    for(int i=1;i<(N+2)*(N+2);i++){
         printf("%f,%f\n",x[i],x_next[i]);
         error+=(x[i]-x_next[i])*(x[i]-x_next[i]);
     }

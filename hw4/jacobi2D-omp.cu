@@ -141,8 +141,10 @@ int main(int argc, char ** argv) {
     }
     
     cudaDeviceSynchronize();
-    for(int i=0;i<(N+2)*(N+2);i++)cout<<x_d[i]<<" ";
     cout<<"cuda time: "<<t.toc()<<endl;
+    
+    cudaMemcpy(x, x_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
+    for(int i=0;i<(N+2)*(N+2);i++)cout<<x[i]<<" ";
     
     free(x);
     free(f);

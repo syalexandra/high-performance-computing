@@ -81,7 +81,6 @@ __global__ void jacobiUpdate(double* x_old,double* x_new,double* f){
     
     if(x>0 && y>0 && x<=N && y<=N){
         x_new[x* (N+2)+ y]=(x_old[(x-1)* (N+2)+ y]+x_old[(x+1)*(N+2)+ y]+x_old[x*(N+2)+ y-1]+x_old[x*(N+2)+ y+1]+hsquare*f[x*(N+2)+y])/4.0;
-        //printf("%d %d %f",x,y,x_new[x* (N+2)+ y]);
     }
     
 }
@@ -147,7 +146,11 @@ int main(int argc, char ** argv) {
     cudaMemcpy(x_next, x_next_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
     double error=0;
     
-    for(int i=0;i<(N+2)*(N+2);i++){printf("%f ",abs(x[i]-x_next[i]));error=max(error,abs(x[i]-x_next[i]));}
+    for(int i=0;i<(N+2)*(N+2);i++){
+        printf("%f %f\n",x[i],x_next[i]);
+        error=max(error,abs(x[i]-x_next[i]));
+    }
+    
     printf("error = %f ",error);
     
     free(x);

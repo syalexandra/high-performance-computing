@@ -134,7 +134,7 @@ int main(int argc, char ** argv) {
     double h=1.0/(N+1);
     double hsquare=h*h;
     
-    for(int i=0;i<1000;i++){
+    for(int i=0;i<10;i++){
         if(i%2==0){
             jacobiUpdate<<<GridDim,BlockDim>>>(x_d,x_next_d,f_d);
             cudaMemcpy(x, x_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);

@@ -80,7 +80,7 @@ __global__ void jacobiUpdate(double* x_old,double* x_new,double* f){
     double hsquare=h*h;
     
     if(x>0 && y>0 && x<=N && y<=N){
-        x_new[x* (N+2)+ y]=(x_old[(x-1)* (N+2)+ y]+x_old[(x+1)*(N+2)+ y]+x_old[x*(N+2)+ y-1]+x_old[x*(N+2)+ y+1]+hsquare*f[x*(N+2)+y])/4;
+        x_new[x* (N+2)+ y]=(x_old[(x-1)* (N+2)+ y]+x_old[(x+1)*(N+2)+ y]+x_old[x*(N+2)+ y-1]+x_old[x*(N+2)+ y+1]+hsquare*f[x*(N+2)+y])/4.0;
     }
     
 }

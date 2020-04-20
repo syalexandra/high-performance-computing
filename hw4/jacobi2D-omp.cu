@@ -144,10 +144,10 @@ int main(int argc, char ** argv) {
     
     cudaMemcpy(x, x_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
     cudaMemcpy(x_next, x_next_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
-    //double error=0.0;
+    double error=0.0;
     
     for(int i=0;i<(N+2);i++){
-        printf("%f",x[i]-x_next[i]);
+        printf("%f,%f\n",x[i],x_next[i]);
         error+=(x[i]-x_next[i])*(x[i]-x_next[i]);
     }
     

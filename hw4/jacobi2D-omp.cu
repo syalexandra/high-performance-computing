@@ -119,6 +119,8 @@ int main(int argc, char ** argv) {
     double * f_d = (double *)malloc((N+2)*(N+2)* sizeof(double));
     for(int i=0;i<(N+2)*(N+2);i++){f_d[i]=1;}
     
+    double *x_next_d,*x_d,*f_d;
+    
     cudaMalloc((void **) &x_next_d,(N+2)*(N+2)* sizeof(double));
     cudaMalloc((void **) &x_d,(N+2)*(N+2)* sizeof(double));
     cudaMalloc((void **) &f_d,(N+2)*(N+2)* sizeof(double));

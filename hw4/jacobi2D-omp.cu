@@ -12,7 +12,7 @@
 using namespace std;
 
 #define BLOCK_SIZE 2//(1UL<<10)
-#define N 4//(1UL<<12)-2
+#define N 2//(1UL<<12)-2
 
 
 void jacobian(double * u,double * f){
@@ -57,7 +57,7 @@ void jacobian(double * u,double * f){
         }
         
         //cout<<"norm"<<endl;
-        cout<<sqrt(norm)<<endl;
+        //cout<<sqrt(norm)<<endl;
         temp=u;
         u=v;
         v=temp;
@@ -138,6 +138,13 @@ int main(int argc, char ** argv) {
         if(i%2==0){
             jacobiUpdate<<<GridDim,BlockDim>>>(x_d,x_next_d,f_d);
             cudaMemcpy(x, x_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
+            
+            for(int i=0;i<=N;i++){
+                for(int j=0;j<=N;j++){
+                    printf("%f ",x[i*(N+2)+j]);
+                }
+                printf("\n");
+            }
             
             double norm=0;
             #pragma omp parallel for collapse(2) reduction (+:norm)

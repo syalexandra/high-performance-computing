@@ -108,12 +108,12 @@ int main(int argc, char ** argv) {
     */
     
     
-    double * x_d=(double*) malloc((N+2)*(N+2)*sizeof(double));
-    double * x_next_d=(double*) malloc((N+2)*(N+2)*sizeof(double));
+    //double * x=(double*) malloc((N+2)*(N+2)*sizeof(double));
+    double * x_next=(double*) malloc((N+2)*(N+2)*sizeof(double));
     
     for(int i=0;i<(N+2)*(N+2);i++){
-        x_d[i]=0;
-        x_next_d[i]=0;
+        //x[i]=0;
+        x_next[i]=0;
     }
     
     double * f_d = (double *)malloc((N+2)*(N+2)* sizeof(double));

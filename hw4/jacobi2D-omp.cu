@@ -12,7 +12,7 @@
 using namespace std;
 
 #define BLOCK_SIZE 32//(1UL<<10)
-#define N 1024//(1UL<<12)-2
+#define N 2048//(1UL<<12)-2
 
 
 void jacobian(double * u,double * f){
@@ -153,7 +153,7 @@ int main(int argc, char ** argv) {
     
     double norm=0;
     
-    //#pragma omp parallel for collapse(2) reduction (+:norm)
+    #pragma omp parallel for collapse(2) reduction (+:norm)
     for(int i=1;i<=N;i++){
         
         for(int j=1;j<=N;j++){

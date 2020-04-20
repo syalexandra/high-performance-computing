@@ -11,9 +11,9 @@
 #include "utils.h"
 using namespace std;
 
-#def TILE_DIM 32
-#def N (1UL<<10)-2
-#def BLOCK_ROWS 32
+#define TILE_DIM 32
+#define N (1UL<<10)-2
+#define BLOCK_ROWS 32
 
 
 void jacobian(double * u,long N, double * f){

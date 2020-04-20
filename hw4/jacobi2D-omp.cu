@@ -98,7 +98,7 @@ int main(int argc, char ** argv) {
     t.tic();
     jacobian(x,f);
     //for(int i=0;i<(N+2)*(N+2);i++)cout<<x[i]<<" ";
-    cout<<"Jacobian Algorithm: "<<t.toc()<<endl;
+    cout<<"openmp time: "<<t.toc()<<endl;
     
     
     /*
@@ -117,6 +117,9 @@ int main(int argc, char ** argv) {
     }
     
     
+    
+    t.tic();
+    
     double *x_next_d,*x_d,*f_d;
     
     cudaMalloc((void **) &x_next_d,(N+2)*(N+2)* sizeof(double));
@@ -126,7 +129,6 @@ int main(int argc, char ** argv) {
     cudaMemcpy(x_next_d, x_next, (N+2)*(N+2)* sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(x_d, x, (N+2)*(N+2)* sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(f_d, f, (N+2)*(N+2)* sizeof(double), cudaMemcpyHostToDevice);
-    
     
     dim3 GridDim((N+2)/TILE_DIM,(N+2)/TILE_DIM);
     dim3 BlockDim(TILE_DIM, BLOCK_ROWS);
@@ -140,7 +142,8 @@ int main(int argc, char ** argv) {
         }
     }
     
-    
+    //for(int i=0;i<(N+2)*(N+2);i++)cout<<x[i]<<" ";
+    cout<<"cuda time: "<<t.toc()<<endl;
     
     free(x);
     free(f);

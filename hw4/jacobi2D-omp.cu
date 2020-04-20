@@ -148,7 +148,7 @@ int main(int argc, char ** argv) {
     double error=0;
     
     for(int i=0;i<(N+2)*(N+2);i++){printf("%f,%f\n ",x[i],x_next[i]);error=max(error,x[i]-x_next[i]);}
-    cout<<error<<endl;
+    printf("error = %f ",error);
     
     free(x);
     free(f);

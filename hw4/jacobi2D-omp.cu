@@ -131,7 +131,7 @@ int main(int argc, char ** argv) {
     cudaMemcpy(x_d, x, (N+2)*(N+2)* sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(f_d, f, (N+2)*(N+2)* sizeof(double), cudaMemcpyHostToDevice);
     
-    dim3 GridDim((N+2)/BLOCK_SIZE,(N+2)/BLOCK_SIZE);//(N+2)/BLOCK_SIZE)
+    dim3 GridDim((N+2)/BLOCK_SIZE,(N+2)/BLOCK_SIZE));//(N+2)/BLOCK_SIZE)
     dim3 BlockDim(BLOCK_SIZE, BLOCK_SIZE);
     double h=1.0/(N+1);
     double hsquare=h*h;

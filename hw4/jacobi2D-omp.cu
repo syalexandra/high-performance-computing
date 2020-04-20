@@ -12,7 +12,7 @@
 using namespace std;
 
 #define BLOCK_SIZE 32//(1UL<<10)
-#define N 1048//(1UL<<12)-2
+#define N 1024//(1UL<<12)-2
 
 
 void jacobian(double * u,double * f){

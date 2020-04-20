@@ -140,17 +140,17 @@ int main(int argc, char ** argv) {
         if(i%2==0){
             jacobiUpdate<<<GridDim,BlockDim>>>(x_d,x_next_d,f_d);
             cudaMemcpy(x, x_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
-            
+            /*
             for(int i=0;i<=N+1;i++){
                 for(int j=0;j<=N+1;j++){
                     printf("%f ",x[i*(N+2)+j]);
                 }
                 printf("\n");
             }
-            
+            */
             
             double norm=0;
-            #pragma omp parallel for collapse(2) reduction (+:norm)
+            //#pragma omp parallel for collapse(2) reduction (+:norm)
             for(int i=1;i<=N;i++){
                 
                 for(int j=1;j<=N;j++){
@@ -165,17 +165,17 @@ int main(int argc, char ** argv) {
             jacobiUpdate<<<GridDim,BlockDim>>>(x_next_d,x_d,f_d);
             
             cudaMemcpy(x_next, x_next_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
-            
+            /*
             for(int i=0;i<=N+1;i++){
                 for(int j=0;j<=N+1;j++){
                     printf("%f ",x_next[i*(N+2)+j]);
                 }
                 printf("\n");
             }
-            
+            */
             
             double norm=0;
-            #pragma omp parallel for collapse(2) reduction (+:norm)
+            //#pragma omp parallel for collapse(2) reduction (+:norm)
             for(int i=1;i<=N;i++){
                 
                 for(int j=1;j<=N;j++){

@@ -107,7 +107,6 @@ int main(int argc, char ** argv) {
     */
     
     
-    
     double * x_next=(double*) malloc((N+2)*(N+2)*sizeof(double));
     
     for(int i=0;i<(N+2)*(N+2);i++){
@@ -144,7 +143,11 @@ int main(int argc, char ** argv) {
     cout<<"cuda time: "<<t.toc()<<endl;
     
     cudaMemcpy(x, x_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
-    for(int i=0;i<(N+2)*(N+2);i++)cout<<x[i]<<" ";
+    cudaMemcpy(x_next, x_next_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
+    double error=0;
+    
+    for(int i=0;i<(N+2)*(N+2);i++)error=max(error,x[i]-x_next[i]);
+    cout<<error<<endl;
     
     free(x);
     free(f);

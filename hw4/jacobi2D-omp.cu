@@ -151,8 +151,7 @@ int main(int argc, char ** argv) {
             for(int i=1;i<=N;i++){
                 
                 for(int j=1;j<=N;j++){
-                    norm+=pow((x[(i-1)*(N+2)+j]+x[i*(N+2)+j-1]+x[(i+1)*(N+2)+j]
-                    +x[i*(N+2)+j+1]-4*x[i*(N+2)+j])/hsquare+f[i*(N+2)+j],2);
+                    norm+=pow((x[(i-1)*(N+2)+j]+x[i*(N+2)+j-1]+x[(i+1)*(N+2)+j]+x[i*(N+2)+j+1]-4*x[i*(N+2)+j])/hsquare+f[i*(N+2)+j],2);
                 }
             }
             
@@ -161,6 +160,27 @@ int main(int argc, char ** argv) {
         }
         else{
             jacobiUpdate<<<GridDim,BlockDim>>>(x_next_d,x_d,f_d);
+            
+            cudaMemcpy(x_next, x_next_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
+            
+            for(int i=0;i<=N+1;i++){
+                for(int j=0;j<=N+1;j++){
+                    printf("%f ",x_next[i*(N+2)+j]);
+                }
+                printf("\n");
+            }
+            
+            double norm=0;
+            #pragma omp parallel for collapse(2) reduction (+:norm)
+            for(int i=1;i<=N;i++){
+                
+                for(int j=1;j<=N;j++){
+                    norm+=pow((x_next[(i-1)*(N+2)+j]+x_next[i*(N+2)+j-1]+x_next[(i+1)*(N+2)+j]+x_next[i*(N+2)+j+1]-4*x_next[i*(N+2)+j])/hsquare+f[i*(N+2)+j],2);
+                }
+            }
+            
+            printf("norm = %f \n",sqrt(norm));
+            
         }
     }
     

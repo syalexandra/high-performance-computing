@@ -151,7 +151,7 @@ int main(int argc, char ** argv) {
     double h=1.0/(N+1);
     double hsquare=h*h;
     
-    norm=0;
+    double norm=0;
     
     #pragma omp parallel for collapse(2) reduction (+:norm)
     for(int i=1;i<=N;i++){

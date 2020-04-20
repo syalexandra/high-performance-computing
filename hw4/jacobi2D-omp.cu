@@ -11,7 +11,7 @@
 #include "utils.h"
 using namespace std;
 
-#define BLOCK_SIZE 64//(1UL<<10)
+#define BLOCK_SIZE 32//(1UL<<10)
 #define N 1048//(1UL<<12)-2
 
 

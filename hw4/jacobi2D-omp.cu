@@ -148,7 +148,7 @@ int main(int argc, char ** argv) {
     double error=0;
     
     for(int i=0;i<(N+2)*(N+2);i++){printf("%f ",fabs(x[i]-x_next[i]));error=max(error,abs(x[i]-x_next[i]));}
-    printf("error = %f ",abs(-1.242);
+    printf("error = %f ",abs(-1.242));
     
     free(x);
     free(f);

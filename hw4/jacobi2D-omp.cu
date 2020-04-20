@@ -11,8 +11,8 @@
 #include "utils.h"
 using namespace std;
 
-#define BLOCK_SIZE 8//(1UL<<10)
-#define N 14//(1UL<<12)-2
+#define BLOCK_SIZE (1UL<<10)
+#define N (1UL<<12)-2
 
 
 void jacobian(double * u,double * f){
@@ -147,7 +147,7 @@ int main(int argc, char ** argv) {
     double error=0;
     
     for(int i=0;i<(N+2)*(N+2);i++){
-        printf("%f %f\n",x[i],x_next[i]);
+        //printf("%f %f\n",x[i],x_next[i]);
         error=max(error,abs(x[i]-x_next[i]));
     }
     

@@ -73,7 +73,7 @@ void jacobian(double * u,long N, double * f){
 }
 
 
-__gloabal__ void jacobiUpdate(double* x_old,double* x_new,double* f,long N){
+__global__ void jacobiUpdate(double* x_old,double* x_new,double* f,long N){
     
     int x = blockIdx.x * TILE_DIM + threadIdx.x;
     int y = blockIdx.y * TILE_DIM + threadIdx.y;

@@ -129,7 +129,7 @@ int main(int argc, char ** argv) {
     cudaMemcpy(x_d, x, (N+2)*(N+2)* sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(f_d, f, (N+2)*(N+2)* sizeof(double), cudaMemcpyHostToDevice);
     
-    dim3 GridDim((N+2)/BLOCK_SIZE,(N+2)/BLOCK_SIZE);
+    dim3 GridDim(BLOCK_SIZE,BLOCK_SIZE);//(N+2)/BLOCK_SIZE)
     dim3 BlockDim(BLOCK_SIZE, BLOCK_SIZE);
     
     for(int i=0;i<1000;i++){
@@ -149,7 +149,7 @@ int main(int argc, char ** argv) {
     double error=0.0;
     
     for(int i=1;i<(N+2)*(N+2);i++){
-        //printf("%f,%f\n",x[i],x_next[i]);
+        printf("%f,%f\n",x[i],x_next[i]);
         error+=(x[i]-x_next[i])*(x[i]-x_next[i]);
     }
     

@@ -78,7 +78,9 @@ __global__ void jacobiUpdate(double* x_old,double* x_new,double* f){
     int y = blockIdx.y * blockDim.y + threadIdx.y;
     double h=1.0/(N+1);
     double hsquare=h*h;
-    printf("%d,%d",x,y);
+    printf("%d,%d,%d,%d",blockIdx.x,blockDim.x,threadIdx.x,x);
+    printf("%d,%d,%d,%d",blockIdx.y,blockDim.y,threadIdx.y,y);
+    
     if(x>0 && y>0 && x<=N && y<=N){
         x_new[x* (N+2)+ y]=(x_old[(x-1)* (N+2)+ y]+x_old[(x+1)*(N+2)+ y]+x_old[x*(N+2)+ y-1]+x_old[x*(N+2)+ y+1]+hsquare*f[x*(N+2)+y])/4.0;
     }

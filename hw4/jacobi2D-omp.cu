@@ -12,7 +12,7 @@
 using namespace std;
 
 #define TILE_DIM 32
-#define N (1UL<<10)-2
+#define N 512-2
 #define BLOCK_ROWS 32
 
 

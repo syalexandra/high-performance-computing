@@ -147,8 +147,8 @@ int main(int argc, char ** argv) {
     cudaMemcpy(x_next, x_next_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
     double error=0;
     
-    for(int i=0;i<(N+2)*(N+2);i++){printf("%f ",fabs(x[i]-x_next[i]));error=max(error,fabs(x[i]-x_next[i]));}
-    printf("error = %f ",fabs(-1.242);
+    for(int i=0;i<(N+2)*(N+2);i++){printf("%f ",fabs(x[i]-x_next[i]));error=max(error,abs(x[i]-x_next[i]));}
+    printf("error = %f ",abs(-1.242);
     
     free(x);
     free(f);

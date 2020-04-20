@@ -130,7 +130,7 @@ int main(int argc, char ** argv) {
     dim3 GridDim((N+2)/BLOCK_SIZE,(N+2)/BLOCK_SIZE);
     dim3 BlockDim(BLOCK_SIZE, BLOCK_SIZE);
     
-    for(int i=0;i<10;i++){
+    for(int i=0;i<5000;i++){
         if(i%2==0){
             jacobiUpdate<<<GridDim,BlockDim>>>(x_d,x_next_d,f_d);
         }
@@ -144,11 +144,11 @@ int main(int argc, char ** argv) {
     
     cudaMemcpy(x, x_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
     cudaMemcpy(x_next, x_next_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
-    double error=0;
+    double error=0.0;
     
     for(int i=0;i<(N+2)*(N+2);i++){
-        printf("%f",x[i]-x_next[i]);
-        error=max(error,abs(x[i]-x_next[i]));
+        //printf("%f",x[i]-x_next[i]);
+        error+=(x[i]-x_next[i])*(x[i]-x_next[i]);
     }
     
     printf("error = %f ",error);

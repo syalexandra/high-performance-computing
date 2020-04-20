@@ -11,8 +11,8 @@
 #include "utils.h"
 using namespace std;
 
-#define BLOCK_SIZE (1UL<<3)
-#define N (1UL<<5)-2
+#define BLOCK_SIZE (1UL<<5)
+#define N (1UL<<12)-2
 
 
 void jacobian(double * u,double * f){

@@ -95,7 +95,7 @@ int main(int argc, char ** argv) {
     for(int i=0;i<(N+2)*(N+2);i++){x[i]=0;}
     Timer t;
     t.tic();
-    jacobian(x,f);
+    //jacobian(x,f);
     //for(int i=0;i<(N+2)*(N+2);i++)cout<<x[i]<<" ";
     cout<<"openmp time: "<<t.toc()<<endl;
     

@@ -12,8 +12,8 @@
 using namespace std;
 
 #define TILE_DIM 32
-#define N 512-2
-#define BLOCK_ROWS 32
+#define N (1UL<<5)
+#define BLOCK_ROWS 8
 
 
 void jacobian(double * u,double * f){

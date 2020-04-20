@@ -16,7 +16,7 @@ using namespace std;
 #define BLOCK_ROWS 32
 
 
-void jacobian(double * u,long N, double * f){
+void jacobian(double * u,double * f){
     int NREPEAT=5000;
     double * v = (double*) malloc((N+2)*(N+2)*sizeof(double));
     double * temp;
@@ -87,17 +87,6 @@ __global__ void jacobiUpdate(double* x_old,double* x_new,double* f,long N){
 }
 
 
-inline cudaError_t checkCuda(cudaError_t result)
-{
-#if defined(DEBUG) || defined(_DEBUG)
-  if (result != cudaSuccess) {
-    fprintf(stderr, "CUDA Runtime Error: %s\n", cudaGetErrorString(result));
-    assert(result == cudaSuccess);
-  }
-#endif
-  return result;
-}
-
 int main(int argc, char ** argv) {
     // insert code here...
     
@@ -107,7 +96,7 @@ int main(int argc, char ** argv) {
     for(int i=0;i<(N+2)*(N+2);i++){x[i]=0;}
     Timer t;
     t.tic();
-    jacobian(x,N,f);
+    jacobian(x,f);
     //for(int i=0;i<(N+2)*(N+2);i++)cout<<x[i]<<" ";
     cout<<"Jacobian Algorithm: "<<t.toc()<<endl;
     

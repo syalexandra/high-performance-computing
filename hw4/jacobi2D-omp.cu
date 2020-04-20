@@ -131,10 +131,26 @@ int main(int argc, char ** argv) {
     
     dim3 GridDim(BLOCK_SIZE,BLOCK_SIZE);//(N+2)/BLOCK_SIZE)
     dim3 BlockDim(BLOCK_SIZE, BLOCK_SIZE);
+    double h=1.0/(N+1);
+    double hsquare=h*h;
     
-    for(int i=0;i<5000;i++){
+    for(int i=0;i<1000;i++){
         if(i%2==0){
             jacobiUpdate<<<GridDim,BlockDim>>>(x_d,x_next_d,f_d);
+            cudaMemcpy(x, x_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
+            
+            double norm=0;
+            #pragma omp parallel for collapse(2) reduction (+:norm)
+            for(int i=1;i<=N;i++){
+                
+                for(int j=1;j<=N;j++){
+                    norm+=pow((x[(i-1)*(N+2)+j]+x[i*(N+2)+j-1]+x[(i+1)*(N+2)+j]
+                    +x[i*(N+2)+j+1]-4*x[i*(N+2)+j])/hsquare+f[i*(N+2)+j],2);
+                }
+            }
+            
+            printf("norm = %f ",sqrt(norm));
+            
         }
         else{
             jacobiUpdate<<<GridDim,BlockDim>>>(x_next_d,x_d,f_d);
@@ -148,21 +164,6 @@ int main(int argc, char ** argv) {
     cudaMemcpy(x_next, x_next_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
     
     
-    double h=1.0/(N+1);
-    double hsquare=h*h;
-    
-    double norm=0;
-    
-    #pragma omp parallel for collapse(2) reduction (+:norm)
-    for(int i=1;i<=N;i++){
-        
-        for(int j=1;j<=N;j++){
-            norm+=pow((x[(i-1)*(N+2)+j]+x[i*(N+2)+j-1]+x[(i+1)*(N+2)+j]
-            +x[i*(N+2)+j+1]-4*x[i*(N+2)+j])/hsquare+f[i*(N+2)+j],2);
-        }
-    }
-    
-    printf("norm = %f ",sqrt(norm));
     
     free(x);
     free(f);

@@ -73,7 +73,7 @@ void jacobian(double * u,double * f){
 }
 
 
-__global__ void jacobiUpdate(double* x_old,double* x_new,double* f,long N){
+__global__ void jacobiUpdate(double* x_old,double* x_new,double* f){
     
     int x = blockIdx.x * TILE_DIM + threadIdx.x;
     int y = blockIdx.y * TILE_DIM + threadIdx.y;
@@ -133,10 +133,10 @@ int main(int argc, char ** argv) {
     
     for(int i=0;i<5000;i++){
         if(i%2==0){
-            jacobiUpdate<<<GridDim,BlockDim>>>(x_d,x_next_d,f_d,N);
+            jacobiUpdate<<<GridDim,BlockDim>>>(x_d,x_next_d,f_d);
         }
         else{
-            jacobiUpdate<<<GridDim,BlockDim>>>(x_next_d,x_d,f_d,N);
+            jacobiUpdate<<<GridDim,BlockDim>>>(x_next_d,x_d,f_d);
         }
     }
     

@@ -11,8 +11,8 @@
 #include "utils.h"
 using namespace std;
 
-#define BLOCK_SIZE 2//(1UL<<10)
-#define N 4//(1UL<<12)-2
+#define BLOCK_SIZE 64//(1UL<<10)
+#define N 1026//(1UL<<12)-2
 
 
 void jacobian(double * u,double * f){
@@ -78,8 +78,8 @@ __global__ void jacobiUpdate(double* x_old,double* x_new,double* f){
     int y = blockIdx.y * blockDim.y + threadIdx.y;
     double h=1.0/(N+1);
     double hsquare=h*h;
-    printf("x:%d,%d,%d,%d\n",blockIdx.x,blockDim.x,threadIdx.x,x);
-    printf("y:%d,%d,%d,%d\n",blockIdx.y,blockDim.y,threadIdx.y,y);
+    //printf("x:%d,%d,%d,%d\n",blockIdx.x,blockDim.x,threadIdx.x,x);
+    //printf("y:%d,%d,%d,%d\n",blockIdx.y,blockDim.y,threadIdx.y,y);
     
     if(x>0 && y>0 && x<=N && y<=N){
         x_new[x* (N+2)+ y]=(x_old[(x-1)* (N+2)+ y]+x_old[(x+1)*(N+2)+ y]+x_old[x*(N+2)+ y-1]+x_old[x*(N+2)+ y+1]+hsquare*f[x*(N+2)+y])/4.0;
@@ -148,9 +148,9 @@ int main(int argc, char ** argv) {
     cudaMemcpy(x_next, x_next_d, (N+2)*(N+2)* sizeof(double), cudaMemcpyDeviceToHost);
     double error=0.0;
     
-    for(int i=(N-1)*(N-1);i<N*(N+2);i++){
-        printf("%f,%f\n",x[i],x_next[i]);
-        //error+=(x[i]-x_next[i])*(x[i]-x_next[i]);
+    for(int i=1;i<(N+2)*(N+2);i++){
+        //printf("%f,%f\n",x[i],x_next[i]);
+        error+=(x[i]-x_next[i])*(x[i]-x_next[i]);
     }
     
     printf("error = %f ",error);

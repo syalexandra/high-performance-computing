@@ -23,7 +23,7 @@
 using namespace std;
 typedef unsigned char uchar;
 
-__host__ __device__ double getOneGradient(double* weight,int index,const double*trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels){
+double getOneGradient(double* weight,int index,const double*trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels){
     
     printf("enter the device functions %d %d %d",n_data,n_weights,n_labels);
     return 1.0;

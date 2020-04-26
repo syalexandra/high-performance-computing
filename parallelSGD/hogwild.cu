@@ -51,12 +51,12 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
             //cudaMemcpy(data,trainingData+r*n_weights,n_weights*sizeof(double),cudaMemcpyHostToDevice);
             //cudaMemcpy(label,trainingLabel+r,sizeof(uchar),cudaMemcpyHostToDevice);
             label[b]=trainingLabel[r];
+            printf("%f ",label[b]);
             for(int w=0;w<n_weights;w++){
                 data[b*n_weights+w]=trainingData[r*n_weights+w];
+                printf("%f ",data[b*n_weights+w]);
             }
         }
-        
-        
         
         deltaWeight=getOneGradient(weight,index, data, label,eta, batchSize, n_weights, n_labels);
         weight[index]-=eta* deltaWeight;

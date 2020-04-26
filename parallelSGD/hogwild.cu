@@ -25,7 +25,7 @@ typedef unsigned char uchar;
 
 __host__ __device__ double getOneGradient(double* weight,int index,const double*trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels){
     
-    printf("%d %d %d",n_data,n_weights,n_labels);
+    printf("enter the device functions %d %d %d",n_data,n_weights,n_labels);
     return 1.0;
     
 }
@@ -48,8 +48,6 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
             curand_init(index,0,b,&state);
             int r;
             r=curand(&state)%n_data;
-            if(r==3820)
-            {printf("random number : %d\n",r);}
             //cudaMemcpy(data,trainingData+r*n_weights,n_weights*sizeof(double),cudaMemcpyHostToDevice);
             //cudaMemcpy(label,trainingLabel+r,sizeof(uchar),cudaMemcpyHostToDevice);
             label[b]=trainingLabel[r];

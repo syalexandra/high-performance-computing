@@ -21,7 +21,7 @@
 using namespace std;
 typedef unsigned char uchar;
 
-__device__ double getOneGradient(double* weight,int index,const double*trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels){
+__global__ double getOneGradient(double* weight,int index,const double*trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels){
     
     printf("%d %d %d",n_data,n_weights,n_labels);
     

@@ -38,10 +38,12 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
     if(index<weight_size){
         double deltaWeight;
         double* data;
-        cudaMalloc(&data,batchSize*n_weights*sizeof(double));
+        //cudaMalloc(&data,batchSize*n_weights*sizeof(double));
+        data=(double*)malloc(batchSize*n_weights*sizeof(double));
         
         uchar* label;
-        cudaMalloc(&label,batchSize*sizeof(uchar));
+        //cudaMalloc(&label,batchSize*sizeof(uchar));
+        label=(uchar*)malloc(batchSize*sizeof(uchar));
         
         for(int b=0;b<batchSize;b++){
             curandState_t state;

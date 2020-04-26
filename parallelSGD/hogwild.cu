@@ -45,10 +45,10 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
         
         for(int b=0;b<batchSize;b++){
             curandState_t state;
-            curand_init(0,0,0,&state);
+            curand_init(index,0,b,&state);
             int r;
             r=curand(&state)%n_data;
-            printf("random number %d",r);
+            printf("random number : %d\n",r);
             //cudaMemcpy(data,trainingData+r*n_weights,n_weights*sizeof(double),cudaMemcpyHostToDevice);
             //cudaMemcpy(label,trainingLabel+r,sizeof(uchar),cudaMemcpyHostToDevice);
             label[b]=trainingLabel[r];
@@ -96,7 +96,7 @@ int main(int argc, const char * argv[]) {
     }
     
     int gridSize=size_image+1;
-    int blockSize=10;
+    int blockSize=2;
     
     
     double* weight;

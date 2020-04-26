@@ -49,10 +49,13 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
             int r;
             r=curand(&state)%n_data;
             printf("random number %d",r);
-            cudaMemcpy(data,trainingData+r*n_weights,n_weights*sizeof(double),cudaMemcpyHostToDevice);
-            cudaMemcpy(label,trainingLabel+r,sizeof(uchar),cudaMemcpyHostToDevice);
+            //cudaMemcpy(data,trainingData+r*n_weights,n_weights*sizeof(double),cudaMemcpyHostToDevice);
+            //cudaMemcpy(label,trainingLabel+r,sizeof(uchar),cudaMemcpyHostToDevice);
+            label[b]=trainingLabel[r];
+            for(int w=0;w<n_weights;w++){
+                data[b*n_weights+w]=trainingData[r*n_weights+w];
+            }
         }
-        
         
         
         

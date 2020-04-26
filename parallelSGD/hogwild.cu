@@ -17,7 +17,7 @@
 #include <chrono>
 #include <omp.h>
 #include <vector>
-#include <curand.kernel.h>
+#include <curand_kernel.h>
 #include <curand.h>
 
 using namespace std;

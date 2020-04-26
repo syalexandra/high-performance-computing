@@ -23,7 +23,7 @@
 using namespace std;
 typedef unsigned char uchar;
 
-__host__ double getOneGradient(double* weight,int index,const double*trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels){
+__host__ __device__ double getOneGradient(double* weight,int index,const double*trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels){
     
     printf("enter the device functions %d %d %d",n_data,n_weights,n_labels);
     return 1.0;
@@ -58,8 +58,8 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
             }
         }
         
-        deltaWeight=getOneGradient(weight,index, data, label,eta, batchSize, n_weights, n_labels);
-        weight[index]-=eta* deltaWeight;
+        //deltaWeight=getOneGradient(weight,index, data, label,eta, batchSize, n_weights, n_labels);
+        //weight[index]-=eta* deltaWeight;
     }
     
 }

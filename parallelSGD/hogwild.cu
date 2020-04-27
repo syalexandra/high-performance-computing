@@ -67,8 +67,6 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
     int index=blockIdx.x*blockDim.x+threadIdx.x;
     int weight_size=n_weights*n_labels;
     
-    for(int i=0;i<1000;i++){printf("%f ",trainingData[i]);}
-    
     
     if(index<weight_size){
         double deltaWeight;
@@ -91,7 +89,7 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
             //printf("%d ",label[b]);
             for(int w=0;w<n_weights;w++){
                 data[b*n_weights+w]=trainingData[r*n_weights+w];
-                //printf("%f ",data[b*n_weights+w]);
+                printf("%f ",data[b*n_weights+w]);
             }
         }
         

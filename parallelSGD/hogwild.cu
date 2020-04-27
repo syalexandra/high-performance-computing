@@ -28,7 +28,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
     double delta_weight=0;
     int i=index / n_weights;//i is for label i
     int j=index % n_weights;//j is for data j
-    
+    printf("%d %d %d \n",i,j,n_data);
     
     for(int b=0;b<n_data;b++){
     
@@ -83,15 +83,15 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
             //cudaMemcpy(data,trainingData+r*n_weights,n_weights*sizeof(double),cudaMemcpyHostToDevice);
             //cudaMemcpy(label,trainingLabel+r,sizeof(uchar),cudaMemcpyHostToDevice);
             label[b]=trainingLabel[r];
-            printf("%d ",label[b]);
+            //printf("%d ",label[b]);
             for(int w=0;w<n_weights;w++){
                 data[b*n_weights+w]=trainingData[r*n_weights+w];
                 //printf("%f ",data[b*n_weights+w]);
             }
         }
         
-        //deltaWeight=getOneGradient(weight,index, data, label,eta, batchSize, n_weights, n_labels,lambda/batchSize);
-        //weight[index]-=eta* deltaWeight;
+        deltaWeight=getOneGradient(weight,index, data, label,eta, batchSize, n_weights, n_labels,lambda/batchSize);
+        weight[index]-=eta* deltaWeight;
     }
     
 }

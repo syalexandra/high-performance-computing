@@ -23,14 +23,44 @@
 using namespace std;
 typedef unsigned char uchar;
 
-__host__ __device__ double getOneGradient(double* weight,int index,const double*trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels){
+__host__ __device__ double getOneGradient(double* weight,int index,const double*trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels,double lambda){
     
-    printf("enter the device functions %d %d %d",n_data,n_weights,n_labels);
-    return 1.0;
+    double delta_weight=0;
+    int i=index / n_weights;//i is for label i
+    int j=index % n_weights;//j is for data j
+    
+    
+    for(int b=0;b<n_data;b++){
+    
+        double probSum=0;
+        double* probList;
+        probList=(double*)malloc(n_labels*sizeof(double));
+        
+        for(int l=0;l<n_labels;l++){
+            double probExp=0;
+            for(int w=0;w<n_weights;w++){
+                probExp+=weight[l*n_weights+w]*trainingData[b*n_weights+w];
+            }
+            probList[l]=exp(probExp);
+            probSum+=exp(probExp);
+        }
+        
+        
+        probList[i]/=probSum;
+        
+        
+        double sign = (trainingLabel[b]==i)?1:0;
+        double partialDerivative = (sign-probList[i])*trainingData[b*n_weights+j];
+        partialDerivative += lambda * 2 * weight[i*n_weights+j];
+        delta_weight -= partialDerivative;
+        
+    }
+    
+    return delta_weight;
     
 }
 
-__global__ void updateWeightKernel(double* weight,const double* trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels,int batchSize){
+__global__ void updateWeightKernel(double* weight,const double* trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels,int batchSize,double lambda){
     
     int index=blockIdx.x*blockDim.x+threadIdx.x;
     int weight_size=n_weights*n_labels;
@@ -60,8 +90,8 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
             }
         }
         
-        deltaWeight=getOneGradient(weight,index, data, label,eta, batchSize, n_weights, n_labels);
-        //weight[index]-=eta* deltaWeight;
+        deltaWeight=getOneGradient(weight,index, data, label,eta, batchSize, n_weights, n_labels,lambda/batchSize);
+        weight[index]-=eta* deltaWeight;
     }
     
 }
@@ -121,11 +151,14 @@ int main(int argc, const char * argv[]) {
     printf("\nEnter learning rate (eta = 0.001):\n");
     //scanf("%lf", &eta);
     
+    double lambda;
+    lambda=0.001;
+    printf("\nEnter regularization parameter (lambda = 0.001):\n");
     
     //update the weight
     for(int j=0;j<n_iterations;j++){
         
-        updateWeightKernel<<<gridSize,blockSize>>>(weight,trainingData,trainingLabel,eta,n_images,size_image+1,10,10);
+        updateWeightKernel<<<gridSize,blockSize>>>(weight,trainingData,trainingLabel,eta,n_images,size_image+1,10,10,lambda);
         cudaDeviceSynchronize();
         
     }

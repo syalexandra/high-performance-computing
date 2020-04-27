@@ -101,20 +101,6 @@ public:
     
     
     
-    double getOneGradient(double* weight,int index,const double** trainingData,const uchar* testingData,int n_data, int n_weights,int n_labels){
-        
-        int size_weights = n_weights * n_labels;
-        
-        int i = index / size_weights;
-        int j = index % size_weights;
-        
-        
-        
-        
-        
-    }
-    
-    
     
     
     

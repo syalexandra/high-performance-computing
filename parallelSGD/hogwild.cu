@@ -35,6 +35,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
         double probSum=0;
         double* probList;
         probList=(double*)malloc(n_labels*sizeof(double));
+        printf("start \n");
         
         for(int l=0;l<n_labels;l++){
             double probExp=0;

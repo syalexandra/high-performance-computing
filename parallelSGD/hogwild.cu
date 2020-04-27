@@ -83,7 +83,7 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
             //cudaMemcpy(data,trainingData+r*n_weights,n_weights*sizeof(double),cudaMemcpyHostToDevice);
             //cudaMemcpy(label,trainingLabel+r,sizeof(uchar),cudaMemcpyHostToDevice);
             label[b]=trainingLabel[r];
-            printf("%f ",label[b]);
+            printf("%d ",label[b]);
             for(int w=0;w<n_weights;w++){
                 data[b*n_weights+w]=trainingData[r*n_weights+w];
                 printf("%f ",data[b*n_weights+w]);
@@ -158,7 +158,7 @@ int main(int argc, const char * argv[]) {
     //update the weight
     for(int j=0;j<n_iterations;j++){
         
-        updateWeightKernel<<<gridSize,blockSize>>>(weight,trainingData,trainingLabel,eta,n_images,size_image+1,10,10,lambda);
+        updateWeightKernel<<<gridSize,blockSize>>>(weight,trainingData,trainingLabel,eta,n_images,size_image+1,10,2,lambda);
         cudaDeviceSynchronize();
         
     }

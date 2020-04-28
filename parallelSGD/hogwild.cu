@@ -132,7 +132,7 @@ int main(int argc, const char * argv[]) {
         trainingLabel[i]=tempLabel[i];
     }
     
-    dim3 gridSize(10,10);
+    dim3 gridSize(4,4);
     dim3 blockSize(10,10);
     
     

@@ -67,15 +67,13 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
     int index=blockIdx.x*blockDim.x+threadIdx.x;
     int weight_size=n_weights*n_labels;
     
-    
+    printf("%d ",weight_size);
     if(index<weight_size){
         double deltaWeight;
         double* data;
-        //cudaMalloc(&data,batchSize*n_weights*sizeof(double));
         data=(double*)malloc(batchSize*n_weights*sizeof(double));
         
         uchar* label;
-        //cudaMalloc(&label,batchSize*sizeof(uchar));
         label=(uchar*)malloc(batchSize*sizeof(uchar));
         
         for(int b=0;b<batchSize;b++){
@@ -83,10 +81,8 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
             curand_init(index,0,b,&state);
             int r;
             r=curand(&state)%n_data;
-            //cudaMemcpy(data,trainingData+r*n_weights,n_weights*sizeof(double),cudaMemcpyHostToDevice);
-            //cudaMemcpy(label,trainingLabel+r,sizeof(uchar),cudaMemcpyHostToDevice);
             label[b]=trainingLabel[r];
-            //printf("%d ",label[b]);
+            printf("%d ",label[b]);
             for(int w=0;w<n_weights;w++){
                 data[b*n_weights+w]=trainingData[r*n_weights+w];
                 printf("%d %d %f \n",r,w,trainingData[r*n_weights+w]);

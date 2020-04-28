@@ -150,7 +150,7 @@ int main(int argc, const char * argv[]) {
     printf("Enter iterations (> 10):\n");
     int n_iterations;
     //scanf("%d", &n_iterations);
-    n_iterations=20;
+    n_iterations=30;
     double eta;
     eta=0.001;
     printf("\nEnter learning rate (eta = 0.001):\n");
@@ -164,7 +164,7 @@ int main(int argc, const char * argv[]) {
     //update the weight
     int offset=0;
     for(int j=0;j<n_iterations;j++){
-        offset=j*4*4*5*5;
+        offset=(j%20)*4*4*5*5;
         updateWeightKernel<<<gridSize,blockSize>>>(weight,trainingData,trainingLabel,eta,n_images,size_image+1,10,2,lambda,offset);
         cudaDeviceSynchronize();
         

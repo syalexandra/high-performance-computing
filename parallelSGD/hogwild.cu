@@ -28,7 +28,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
     double delta_weight=0;
     int i=index / n_weights;//i is for label i
     int j=index % n_weights;//j is for data j
-    //printf("%d %d %d %d %d \n",index,i,j,n_weights,n_labels);
+    printf("%d %d %d %d %d \n",index,i,j,n_weights,n_labels);
     
     double* probList;
     probList=(double*)malloc(n_labels*sizeof(double));
@@ -70,7 +70,7 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
     int index=blockIdx.x*blockDim.x+threadIdx.x;
     int weight_size=n_weights*n_labels;
     
-    printf("%d ",weight_size);
+    //printf("%d ",weight_size);
     if(index<weight_size){
         double deltaWeight;
         double* data;

@@ -46,7 +46,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
             //printf("%d, %d, probExp %f ",i,j,exp(probExp));
             probList[l]=exp(probExp);
             probSum+=exp(probExp);
-            printf("%d,%d,%d\n",index,l,w);
+            printf("%d,%d,%d\n",index,l);
         }
         
         printf("probList[i]: %f \n",probList[i]);

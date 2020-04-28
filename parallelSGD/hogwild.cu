@@ -150,7 +150,7 @@ int main(int argc, const char * argv[]) {
     printf("Enter iterations (> 10):\n");
     int n_iterations;
     //scanf("%d", &n_iterations);
-    n_iterations=10;
+    n_iterations=20;
     double eta;
     eta=0.001;
     printf("\nEnter learning rate (eta = 0.001):\n");

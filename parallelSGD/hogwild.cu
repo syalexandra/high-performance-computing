@@ -159,6 +159,7 @@ int main(int argc, const char * argv[]) {
     lambda=0.001;
     printf("\nEnter regularization parameter (lambda = 0.001):\n");
     
+    printf("%d %d \n",gridSize,blockSize);
     //update the weight
     for(int j=0;j<n_iterations;j++){
         

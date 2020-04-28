@@ -92,7 +92,7 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
                 //printf("%d %d %f \n",r,w,trainingData[r*n_weights+w]);
             }
         }
-        
+        printf("end");
         deltaWeight=getOneGradient(weight,index, data, label,eta, batchSize, n_weights, n_labels,lambda/batchSize);
         weight[index]-=eta* deltaWeight;
     }

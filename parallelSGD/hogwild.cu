@@ -132,7 +132,7 @@ int main(int argc, const char * argv[]) {
     }
     
     dim3 gridSize(4,4);
-    dim3 blockSize(10,10);
+    dim3 blockSize(4,4);
     
     
     double* weight;

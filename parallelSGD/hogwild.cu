@@ -40,13 +40,14 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
         for(int l=0;l<n_labels;l++){
             double probExp=0;
             for(int w=0;w<n_weights;w++){
-                //printf("%d %d %d %f %f \n",l,w,b,weight[l*n_weights+w],trainingData[b*n_weights+w]);
+                printf("%d %d %d %f %f \n",l,w,b,weight[l*n_weights+w],trainingData[b*n_weights+w]);
                 probExp+=weight[l*n_weights+w]*trainingData[b*n_weights+w];
+                
             }
             //printf("%d, %d, probExp %f ",i,j,exp(probExp));
             probList[l]=exp(probExp);
             probSum+=exp(probExp);
-            printf("%d,%d,%d\n",index,l);
+            
         }
         
         printf("probList[i]: %f \n",probList[i]);
@@ -132,8 +133,8 @@ int main(int argc, const char * argv[]) {
         trainingLabel[i]=tempLabel[i];
     }
     
-    dim3 gridSize(4,4);
-    dim3 blockSize(10,10);
+    dim3 gridSize(2,2);
+    dim3 blockSize(2,2);
     
     
     double* weight;

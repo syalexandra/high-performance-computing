@@ -67,7 +67,10 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
 
 __global__ void updateWeightKernel(double* weight,const double* trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels,int batchSize,double lambda){
     
-    int index=blockIdx.x*blockDim.x+threadIdx.x;
+    int x=blockIdx.x*blockDim.x+threadIdx.x;
+    int y=blockIdx.y*blockDim.y+threadIdx.y;
+    int index=x*gridDim.x*blockDim.x;
+    printf("index %d \n",index);
     int weight_size=n_weights*n_labels;
     
     if(index<weight_size){
@@ -129,8 +132,8 @@ int main(int argc, const char * argv[]) {
         trainingLabel[i]=tempLabel[i];
     }
     
-    int gridSize=10;
-    int blockSize=785;
+    dim gridSize(10,10);
+    dim blockSize(10,10);
     
     
     double* weight;

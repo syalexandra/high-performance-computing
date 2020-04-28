@@ -50,7 +50,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
         }
         
         probList[i]/=probSum;
-        printf("probSum: %f ",probSum);
+        printf("probList[i]: %f \n",probList[i]);
         
         double sign = (trainingLabel[b]==i)?1:0;
         double partialDerivative = (sign-probList[i])*trainingData[b*n_weights+j];

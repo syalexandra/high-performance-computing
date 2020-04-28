@@ -30,11 +30,12 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
     int j=index % n_weights;//j is for data j
     //printf("%d %d %d \n",i,j,n_weights);
     
+    double* probList;
+    probList=(double*)malloc(n_labels*sizeof(double));
     for(int b=0;b<n_data;b++){
     
         double probSum=0;
-        double* probList;
-        probList=(double*)malloc(n_labels*sizeof(double));
+        
         
         for(int l=0;l<n_labels;l++){
             double probExp=0;
@@ -45,20 +46,20 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
             printf("probExp %f ",probExp);
             probList[l]=exp(probExp);
             probSum+=exp(probExp);
-            printf("probSum: %f ",probSum);
+            
         }
         
         probList[i]/=probSum;
-        
+        printf("probSum: %f ",probSum);
         
         double sign = (trainingLabel[b]==i)?1:0;
         double partialDerivative = (sign-probList[i])*trainingData[b*n_weights+j];
         partialDerivative += lambda * 2 * weight[i*n_weights+j];
         delta_weight -= partialDerivative;
-        free(probList);
+        
     }
     printf("delta_weight: %f",delta_weight);
-    
+    free(probList);
     return delta_weight;
     
 }

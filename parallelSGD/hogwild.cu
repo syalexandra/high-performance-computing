@@ -44,15 +44,14 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
                 probExp+=weight[l*n_weights+w]*trainingData[b*n_weights+w];
                 
             }
-            //printf("%d, %d, probExp %f ",i,j,exp(probExp));
             probList[l]=exp(probExp);
             probSum+=exp(probExp);
             
         }
         
-        printf("probList[i]: %f \n",probList[i]);
-        probList[i]/=probSum;
         
+        probList[i]/=probSum;
+        //printf("probList[i]: %f \n",probList[i]);
         
         double sign = (trainingLabel[b]==i)?1:0;
         double partialDerivative = (sign-probList[i])*trainingData[b*n_weights+j];
@@ -71,7 +70,6 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
     int x=blockIdx.x*blockDim.x+threadIdx.x;
     int y=blockIdx.y*blockDim.y+threadIdx.y;
     int index=x*gridDim.x*blockDim.x+y;
-    //printf("index %d \n",index);
     int weight_size=n_weights*n_labels;
     
     if(index<weight_size){
@@ -171,6 +169,8 @@ int main(int argc, const char * argv[]) {
         
     }
     
+    
+    printf("end");
     free(tempData);
     free(tempLabel);
     cudaFree(trainingData);

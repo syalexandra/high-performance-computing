@@ -70,7 +70,7 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
     int x=blockIdx.x*blockDim.x+threadIdx.x;
     int y=blockIdx.y*blockDim.y+threadIdx.y;
     int index=x*gridDim.x*blockDim.x+y;
-    //printf("index %d \n",index);
+    printf("index %d \n",index);
     int weight_size=n_weights*n_labels;
     
     if(index<weight_size){

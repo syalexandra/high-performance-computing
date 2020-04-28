@@ -130,8 +130,8 @@ int main(int argc, const char * argv[]) {
         trainingLabel[i]=tempLabel[i];
     }
     
-    int gridSize=size_image+1;
-    int blockSize=10;
+    int gridSize=10;
+    int blockSize=size_image+1;
     
     
     double* weight;

@@ -65,11 +65,11 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
     
 }
 
-__global__ void updateWeightKernel(double* weight,const double* trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels,int batchSize,double lambda){
+__global__ void updateWeightKernel(double* weight,const double* trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels,int batchSize,double lambda,int offset){
     
     int x=blockIdx.x*blockDim.x+threadIdx.x;
     int y=blockIdx.y*blockDim.y+threadIdx.y;
-    int index=x*gridDim.x*blockDim.x+y;
+    int index=(x*gridDim.x*blockDim.x+y)+offset;
     int weight_size=n_weights*n_labels;
     
     if(index<weight_size){
@@ -162,9 +162,10 @@ int main(int argc, const char * argv[]) {
     
     //printf("%d %d \n",gridSize,blockSize);
     //update the weight
+    int offset=0;
     for(int j=0;j<n_iterations;j++){
-        
-        updateWeightKernel<<<gridSize,blockSize>>>(weight,trainingData,trainingLabel,eta,n_images,size_image+1,10,2,lambda);
+        offset=j*4*4*5*5;
+        updateWeightKernel<<<gridSize,blockSize>>>(weight,trainingData,trainingLabel,eta,n_images,size_image+1,10,2,lambda,offset);
         cudaDeviceSynchronize();
         
     }

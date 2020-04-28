@@ -131,7 +131,7 @@ int main(int argc, const char * argv[]) {
     }
     
     int gridSize=size_image+1;
-    int blockSize=2;
+    int blockSize=10;
     
     
     double* weight;

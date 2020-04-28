@@ -28,7 +28,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
     double delta_weight=0;
     int i=index / n_weights;//i is for label i
     int j=index % n_weights;//j is for data j
-    //printf("%d %d %d \n",i,j,n_data);
+    printf("%d %d %d \n",i,j,n_weights);
     
     for(int b=0;b<n_data;b++){
     
@@ -39,10 +39,10 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
         for(int l=0;l<n_labels;l++){
             double probExp=0;
             for(int w=0;w<n_weights;w++){
-                //printf("%f %f \n",weight[l*n_weights+w],trainingData[b*n_weights+w]);
+                //printf("%d %d %d %f %f \n",l,w,b,weight[l*n_weights+w],trainingData[b*n_weights+w]);
                 probExp+=weight[l*n_weights+w]*trainingData[b*n_weights+w];
             }
-            //printf("%f ",probExp);
+            printf("%f ",probExp);
             probList[l]=exp(probExp);
             probSum+=exp(probExp);
         }

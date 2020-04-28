@@ -58,6 +58,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
         
     }
     printf("delta_weight: %f",delta_weight);
+    free(probList);
     return delta_weight;
     
 }

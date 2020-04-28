@@ -47,7 +47,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
             probSum+=exp(probExp);
         }
         
-        //printf("%f ",probSum);
+        printf("%f ",probSum);
         probList[i]/=probSum;
         
         
@@ -89,7 +89,7 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
             //printf("%d ",label[b]);
             for(int w=0;w<n_weights;w++){
                 data[b*n_weights+w]=trainingData[r*n_weights+w];
-                printf("%d %d %f \n",r,w,trainingData[r*n_weights+w]);
+                //printf("%d %d %f \n",r,w,trainingData[r*n_weights+w]);
             }
         }
         

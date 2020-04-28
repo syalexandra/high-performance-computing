@@ -42,12 +42,12 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
                 //printf("%d %d %d %f %f \n",l,w,b,weight[l*n_weights+w],trainingData[b*n_weights+w]);
                 probExp+=weight[l*n_weights+w]*trainingData[b*n_weights+w];
             }
-            printf("%f ",probExp);
+            printf("probExp %f ",probExp);
             probList[l]=exp(probExp);
             probSum+=exp(probExp);
+            printf("probSum: %f ",probSum);
         }
         
-        printf("probSum: %f ",probSum);
         probList[i]/=probSum;
         
         

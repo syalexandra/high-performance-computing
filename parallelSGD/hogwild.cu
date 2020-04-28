@@ -28,7 +28,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
     double delta_weight=0;
     int i=index / n_weights;//i is for label i
     int j=index % n_weights;//j is for data j
-    printf("%d %d %d \n",i,j,n_weights);
+    //printf("%d %d %d \n",i,j,n_weights);
     
     for(int b=0;b<n_data;b++){
     
@@ -85,7 +85,7 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
             printf("%d ",label[b]);
             for(int w=0;w<n_weights;w++){
                 data[b*n_weights+w]=trainingData[r*n_weights+w];
-                printf("%d %d %f \n",r,w,trainingData[r*n_weights+w]);
+                //printf("%d %d %f \n",r,w,trainingData[r*n_weights+w]);
             }
         }
         printf("end");

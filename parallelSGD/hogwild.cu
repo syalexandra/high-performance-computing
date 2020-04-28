@@ -55,10 +55,10 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
         double partialDerivative = (sign-probList[i])*trainingData[b*n_weights+j];
         partialDerivative += lambda * 2 * weight[i*n_weights+j];
         delta_weight -= partialDerivative;
-        
+        free(probList);
     }
     printf("delta_weight: %f",delta_weight);
-    free(probList);
+    
     return delta_weight;
     
 }

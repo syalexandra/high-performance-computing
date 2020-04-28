@@ -70,7 +70,6 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
     int index=blockIdx.x*blockDim.x+threadIdx.x;
     int weight_size=n_weights*n_labels;
     
-    //printf("%d ",weight_size);
     if(index<weight_size){
         double deltaWeight;
         double* data;
@@ -159,7 +158,7 @@ int main(int argc, const char * argv[]) {
     lambda=0.001;
     printf("\nEnter regularization parameter (lambda = 0.001):\n");
     
-    printf("%d %d \n",gridSize,blockSize);
+    //printf("%d %d \n",gridSize,blockSize);
     //update the weight
     for(int j=0;j<n_iterations;j++){
         

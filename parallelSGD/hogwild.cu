@@ -91,6 +91,8 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
         printf("end");
         deltaWeight=getOneGradient(weight,index, data, label,eta, batchSize, n_weights, n_labels,lambda/batchSize);
         weight[index]-=eta* deltaWeight;
+        free(data);
+        free(label);
     }
     
 }
@@ -161,6 +163,12 @@ int main(int argc, const char * argv[]) {
         cudaDeviceSynchronize();
         
     }
+    
+    free(tempData);
+    free(tempLabel);
+    cudaFree(trainingData);
+    cudaFree(trainingLabel);
+    cudaFree(weight);
     
     
     

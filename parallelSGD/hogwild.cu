@@ -98,7 +98,6 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
 }
 
 __global__ void updateWeightKernel(double* weight,const double* trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels,int batchSize,double lambda,int offset){
-    printf("enter");
     int x=blockIdx.x*blockDim.x+threadIdx.x;
     int y=blockIdx.y*blockDim.y+threadIdx.y;
     int index=(x*gridDim.x*blockDim.x+y)+offset;
@@ -189,7 +188,7 @@ int main(int argc, const char * argv[]) {
     printf("Enter iterations (> 10):\n");
     int n_iterations;
     //scanf("%d", &n_iterations);
-    n_iterations=40;
+    n_iterations=10000;
     double eta;
     eta=0.001;
     printf("\nEnter learning rate (eta = 0.001):\n");

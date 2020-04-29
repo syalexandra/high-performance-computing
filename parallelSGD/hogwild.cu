@@ -24,7 +24,7 @@ using namespace std;
 typedef unsigned char uchar;
 
 
-__host__ __device__ double getLoss(double* weight,double** trainingData,uchar* trainingLabel,int n_data,int n_weights,int n_labels,double lambda){
+double getLoss(double* weight,double** trainingData,uchar* trainingLabel,int n_data,int n_weights,int n_labels,double lambda){
 
     double summ=0;
     double* exponent=(double*)malloc(n_labels*sizeof(double));
@@ -91,7 +91,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
         delta_weight -= partialDerivative;
         
     }
-    printf("index: %d delta_weight: %f\n",index,delta_weight);
+    //printf("index: %d delta_weight: %f\n",index,delta_weight);
     free(probList);
     return delta_weight;
     
@@ -103,7 +103,6 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
     int y=blockIdx.y*blockDim.y+threadIdx.y;
     int index=(x*gridDim.x*blockDim.x+y)+offset;
     int weight_size=n_weights*n_labels;
-    printf("%d ",index);
     if(index<weight_size){
         double deltaWeight;
         double* data;
@@ -190,7 +189,7 @@ int main(int argc, const char * argv[]) {
     printf("Enter iterations (> 10):\n");
     int n_iterations;
     //scanf("%d", &n_iterations);
-    n_iterations=10;
+    n_iterations=40;
     double eta;
     eta=0.001;
     printf("\nEnter learning rate (eta = 0.001):\n");
@@ -201,8 +200,8 @@ int main(int argc, const char * argv[]) {
     printf("\nEnter regularization parameter (lambda = 0.001):\n");
     
     
-    //double oldLoss=getLoss(weight,tempData,tempLabel,n_images,size_image+1,10,lambda);
-    //printf("old loss: %f \n",oldLoss);
+    double oldLoss=getLoss(weight,tempData,tempLabel,n_images,size_image+1,10,lambda);
+    printf("old loss: %f \n",oldLoss);
     
     //update the weight
     int offset=0;
@@ -216,8 +215,8 @@ int main(int argc, const char * argv[]) {
     
     
     
-    //double newLoss=getLoss(weight,tempData,tempLabel,n_images,size_image+1,10,lambda);
-    //printf("new loss: %f \n",newLoss);
+    double newLoss=getLoss(weight,tempData,tempLabel,n_images,size_image+1,10,lambda);
+    printf("new loss: %f \n",newLoss);
     
     printf("end");
     free(tempData);

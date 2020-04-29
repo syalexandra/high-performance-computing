@@ -124,9 +124,12 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
                 //printf("%d %d %f \n",r,w,trainingData[r*n_weights+w]);
             }
         }
+        if(index==1000){printf("%f \n",weight[index]);}
         
         deltaWeight=getOneGradient(weight,index, data, label,eta, batchSize, n_weights, n_labels,lambda/batchSize);
         weight[index]-=eta* deltaWeight;
+        
+        if(index==1000){printf("%f %f \n",deltaWeight,weight[index]);}
         free(data);
         free(label);
     }

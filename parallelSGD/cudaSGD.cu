@@ -24,6 +24,33 @@ using namespace std;
 typedef unsigned char uchar;
 
 
+void test(double* weight,double** testingData, uchar* testingLabels, int n_data, int n_weights,int n_labels)
+{
+    int correct_data = 0;
+    vector<double> probList(n_labels);
+    double prob_exponent, maxProb, probSum;
+    for(int j=0; j<n_data; j++){
+    //n_data is 60000, size_weights is 28*28+1, size_label is 10
+        maxProb = 0;
+        probSum = 0;
+        for(int i=0;i<n_labels;i++){
+            //probList[i] = 0;//unnecessary
+            prob_exponent=0;//necessary
+            for(int k=0;k<n_weights;k++){
+            prob_exponent += weight[i*n_weights+k]*testingData[j][k];
+            }
+            probList[i] = exp(prob_exponent);
+            if(probList[i] > maxProb)
+            maxProb = probList[i];
+            probSum += probList[i];
+        }
+        if(probList[testingLabels[j]] == maxProb)
+            correct_data++;
+    
+    }
+    printf("\n%d correct out of %d.\nRatio: %f\n", correct_data, n_data, (float)correct_data/n_data);
+}
+
 double getLoss(double* weight,double** trainingData,uchar* trainingLabel,int n_data,int n_weights,int n_labels,double lambda){
 
     double summ=0;
@@ -216,12 +243,27 @@ int main(int argc, const char * argv[]) {
     
     double newLoss=getLoss(weight,tempData,tempLabel,n_images,size_image+1,10,lambda);
     printf("new loss: %f \n",newLoss);
-    
     printf("end");
+    
     free(tempData);
     free(tempLabel);
     cudaFree(trainingData);
     cudaFree(trainingLabel);
+    
+    
+    int n_images_test;
+    int size_image_test;
+    double **testingData;
+    testingData = data.read_mnist_images("t10k-images-idx3-ubyte", n_images_test, size_image_test);
+    
+    int n_labels_test;
+    uchar *testingLabels;
+    testingLabels = data.read_mnist_labels("t10k-labels-idx1-ubyte",n_labels_test);
+    
+    test(weight,testingData, testingLabels, n_images_test, size_image+1, 10);
+    printf("Time elapsed in training = %f\n", t);
+    
+    
     cudaFree(weight);
     
     

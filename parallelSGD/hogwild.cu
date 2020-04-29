@@ -24,7 +24,7 @@ using namespace std;
 typedef unsigned char uchar;
 
 
-__host__ __device__ double getLoss(double* weight,double** trainingData,uchar* trainingLabel,int n_data,int n_weights,int n_labels,double lambda){
+double getLoss(double* weight,double** trainingData,uchar* trainingLabel,int n_data,int n_weights,int n_labels,double lambda){
 
     double summ=0;
     double* exponent=(double*)malloc(n_labels*sizeof(double));
@@ -98,7 +98,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
 }
 
 __global__ void updateWeightKernel(double* weight,const double* trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels,int batchSize,double lambda,int offset){
-    
+    print("enter");
     int x=blockIdx.x*blockDim.x+threadIdx.x;
     int y=blockIdx.y*blockDim.y+threadIdx.y;
     int index=(x*gridDim.x*blockDim.x+y)+offset;
@@ -167,8 +167,8 @@ int main(int argc, const char * argv[]) {
         trainingLabel[i]=tempLabel[i];
     }
     
-    dim3 gridSize(4,4);
-    dim3 blockSize(4,4);
+    dim3 gridSize(2,2);
+    dim3 blockSize(2,2);
     
     
     double* weight;

@@ -261,7 +261,7 @@ int main(int argc, const char * argv[]) {
     testingLabels = data.read_mnist_labels("t10k-labels-idx1-ubyte",n_labels_test);
     
     test(weight,testingData, testingLabels, n_images_test, size_image+1, 10);
-    printf("Time elapsed in training = %f\n", t);
+    
     
     
     cudaFree(weight);

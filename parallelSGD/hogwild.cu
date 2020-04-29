@@ -24,7 +24,7 @@ using namespace std;
 typedef unsigned char uchar;
 
 
-double getLoss(double* weight,double** trainingData,uchar* trainingLabel,int n_data,int n_weights,int n_labels,double lambda){
+__host__ __device__ double getLoss(double* weight,double** trainingData,uchar* trainingLabel,int n_data,int n_weights,int n_labels,double lambda){
 
     double summ=0;
     double* exponent=(double*)malloc(n_labels*sizeof(double));
@@ -168,7 +168,7 @@ int main(int argc, const char * argv[]) {
     }
     
     dim3 gridSize(4,4);
-    dim3 blockSize(5,5);
+    dim3 blockSize(4,4);
     
     
     double* weight;

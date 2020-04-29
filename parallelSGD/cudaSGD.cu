@@ -206,7 +206,7 @@ int main(int argc, const char * argv[]) {
     int offset=0;
     for(int j=0;j<n_iterations;j++){
         offset=(j%20)*4*4*5*5;
-        updateWeightKernel<<<gridSize,blockSize>>>(weight,trainingData,trainingLabel,eta,n_images,size_image+1,10,10,lambda,offset);
+        updateWeightKernel<<<gridSize,blockSize>>>(weight,trainingData,trainingLabel,eta,n_images,size_image+1,10,5,lambda,offset);
         cudaDeviceSynchronize();
         
     }

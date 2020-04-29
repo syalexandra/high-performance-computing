@@ -23,6 +23,38 @@
 using namespace std;
 typedef unsigned char uchar;
 
+
+double getLoss(double* weight,const double** trainingData,const uchar* trainingLabel,int n_data,int n_weights,int n_labels,double lambda){
+
+    double summ=0;
+    double* exponent=(double*)malloc(n_labels*sizeof(double));
+    for(int i=0;i<n_data;i++){
+        
+        double expSum=0;
+        for(int k=0;k<n_labels;k++){
+            exponent[k]=0;
+            for(int j=0;j<n_weights;j++){
+                exponent[k]+=weight[k*n_weights+j]*trainingData[i][j];
+                if(k==trainingLabel[i]){
+                    summ-=exponent[k];
+                }
+            }
+            expSum+=exp(exponent[k]);
+        }
+        if(expSum>0)summ+=log(expSum);
+    }
+    
+    double regularizationTerm=0;
+    for(int k=0; k<n_labels; k++){
+        for(int j=0; j<n_weights; j++){
+            regularizationTerm += weight[k*n_weights+j] * weight[k*n_weights+j];
+        }
+    }
+    
+    regularizationTerm*=lambda;
+    return regularizationTerm+summ;
+}
+
 __host__ __device__ double getOneGradient(double* weight,int index,const double*trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels,double lambda){
     
     double delta_weight=0;
@@ -59,7 +91,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
         delta_weight -= partialDerivative;
         
     }
-    printf("index: %d delta_weight: %f\n",index,delta_weight);
+    //printf("index: %d delta_weight: %f\n",index,delta_weight);
     free(probList);
     return delta_weight;
     
@@ -147,10 +179,14 @@ int main(int argc, const char * argv[]) {
         weight[i]=distribution(generator);
     }
     
+    
+    
+    
+    
     printf("Enter iterations (> 10):\n");
     int n_iterations;
     //scanf("%d", &n_iterations);
-    n_iterations=30;
+    n_iterations=1000;
     double eta;
     eta=0.001;
     printf("\nEnter learning rate (eta = 0.001):\n");
@@ -160,16 +196,23 @@ int main(int argc, const char * argv[]) {
     lambda=0.001;
     printf("\nEnter regularization parameter (lambda = 0.001):\n");
     
-    //printf("%d %d \n",gridSize,blockSize);
+    
+    double oldLoss=getLoss(weight,tempData,tempLabel,n_images,size_image+1,10,lambda);
+    printf("old loss: %f \n",oldLoss);
+    
     //update the weight
     int offset=0;
     for(int j=0;j<n_iterations;j++){
         offset=(j%20)*4*4*5*5;
-        updateWeightKernel<<<gridSize,blockSize>>>(weight,trainingData,trainingLabel,eta,n_images,size_image+1,10,2,lambda,offset);
+        updateWeightKernel<<<gridSize,blockSize>>>(weight,trainingData,trainingLabel,eta,n_images,size_image+1,10,10,lambda,offset);
         cudaDeviceSynchronize();
         
     }
     
+    
+    
+    double newLoss=getLoss(weight,tempData,tempLabel,n_images,size_image+1,10,lambda);
+    printf("new loss: %f \n",newLoss);
     
     printf("end");
     free(tempData);

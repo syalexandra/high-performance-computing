@@ -24,7 +24,7 @@ using namespace std;
 typedef unsigned char uchar;
 
 
-double getLoss(double* weight,const double** trainingData,const uchar* trainingLabel,int n_data,int n_weights,int n_labels,double lambda){
+double getLoss(double* weight,double** trainingData,uchar* trainingLabel,int n_data,int n_weights,int n_labels,double lambda){
 
     double summ=0;
     double* exponent=(double*)malloc(n_labels*sizeof(double));

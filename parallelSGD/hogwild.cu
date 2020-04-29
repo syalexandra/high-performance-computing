@@ -165,8 +165,8 @@ int main(int argc, const char * argv[]) {
         trainingLabel[i]=tempLabel[i];
     }
     
-    dim3 gridSize(2,2);
-    dim3 blockSize(2,2);
+    dim3 gridSize(4,4);
+    dim3 blockSize(5,5);
     
     
     double* weight;
@@ -188,7 +188,7 @@ int main(int argc, const char * argv[]) {
     printf("Enter iterations (> 10):\n");
     int n_iterations;
     //scanf("%d", &n_iterations);
-    n_iterations=10000;
+    n_iterations=1000;
     double eta;
     eta=0.001;
     printf("\nEnter learning rate (eta = 0.001):\n");

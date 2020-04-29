@@ -201,8 +201,8 @@ int main(int argc, const char * argv[]) {
     printf("\nEnter regularization parameter (lambda = 0.001):\n");
     
     
-    double oldLoss=getLoss(weight,tempData,tempLabel,n_images,size_image+1,10,lambda);
-    printf("old loss: %f \n",oldLoss);
+    //double oldLoss=getLoss(weight,tempData,tempLabel,n_images,size_image+1,10,lambda);
+    //printf("old loss: %f \n",oldLoss);
     
     //update the weight
     int offset=0;
@@ -216,8 +216,8 @@ int main(int argc, const char * argv[]) {
     
     
     
-    double newLoss=getLoss(weight,tempData,tempLabel,n_images,size_image+1,10,lambda);
-    printf("new loss: %f \n",newLoss);
+    //double newLoss=getLoss(weight,tempData,tempLabel,n_images,size_image+1,10,lambda);
+    //printf("new loss: %f \n",newLoss);
     
     printf("end");
     free(tempData);

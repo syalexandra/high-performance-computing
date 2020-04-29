@@ -56,6 +56,7 @@ double getLoss(double* weight,double** trainingData,uchar* trainingLabel,int n_d
 }
 
 __host__ __device__ double getOneGradient(double* weight,int index,const double*trainingData,const uchar* trainingLabel,double eta,int n_data,int n_weights,int n_labels,double lambda){
+    //n_data is 2. which means i will use two data points to update one weight.
     
     double delta_weight=0;
     int i=index / n_weights;//i is for label i
@@ -164,7 +165,7 @@ int main(int argc, const char * argv[]) {
         trainingLabel[i]=tempLabel[i];
     }
     
-    //define the size of cuda grid and block
+    //define the size of cuda grid and block. after test, this is the maximum i can use
     dim3 gridSize(4,4);
     dim3 blockSize(5,5);
     

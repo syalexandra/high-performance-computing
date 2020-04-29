@@ -143,7 +143,6 @@ int main(int argc, const char * argv[]) {
     int n_images;
     int size_image;
     double **tempData;
-    //trainingData = data.read_mnist_images("train-images-idx3-ubyte",n_images, size_image);
     tempData = data.read_mnist_images("train-images.idx3-ubyte",n_images, size_image);
     //n_images 60000,size_images=785
     double * trainingData;
@@ -165,6 +164,7 @@ int main(int argc, const char * argv[]) {
         trainingLabel[i]=tempLabel[i];
     }
     
+    //define the size of cuda grid and block
     dim3 gridSize(4,4);
     dim3 blockSize(5,5);
     
@@ -186,18 +186,18 @@ int main(int argc, const char * argv[]) {
     
     
     printf("Enter iterations (> 10):\n");
-    int n_iterations;
-    //scanf("%d", &n_iterations);
-    n_iterations=1000;
+    int n_iterations=1000;
+    scanf("%d", &n_iterations);
+    
     double eta;
     eta=0.001;
     printf("\nEnter learning rate (eta = 0.001):\n");
-    //scanf("%lf", &eta);
+    scanf("%lf", &eta);
     
     double lambda;
     lambda=0.001;
     printf("\nEnter regularization parameter (lambda = 0.001):\n");
-    
+    scanf("%lf", &lambda);
     
     double oldLoss=getLoss(weight,tempData,tempLabel,n_images,size_image+1,10,lambda);
     printf("old loss: %f \n",oldLoss);
@@ -208,7 +208,6 @@ int main(int argc, const char * argv[]) {
         offset=(j%20)*4*4*5*5;
         updateWeightKernel<<<gridSize,blockSize>>>(weight,trainingData,trainingLabel,eta,n_images,size_image+1,10,2,lambda,offset);
         cudaDeviceSynchronize();
-        //printf("%f %f %f %f %f %f %f\n",weight[1000],weight[2000],weight[3000],weight[4000],weight[5000],weight[6000],weight[70000]);
         
     }
     

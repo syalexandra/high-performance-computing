@@ -91,7 +91,7 @@ __host__ __device__ double getOneGradient(double* weight,int index,const double*
         delta_weight -= partialDerivative;
         
     }
-    //printf("index: %d delta_weight: %f\n",index,delta_weight);
+    printf("index: %d delta_weight: %f\n",index,delta_weight);
     free(probList);
     return delta_weight;
     
@@ -124,12 +124,12 @@ __global__ void updateWeightKernel(double* weight,const double* trainingData,con
                 //printf("%d %d %f \n",r,w,trainingData[r*n_weights+w]);
             }
         }
-        printf("%d %f \n",index,weight[index]);
+        //printf("%d %f \n",index,weight[index]);
         
         deltaWeight=getOneGradient(weight,index, data, label,eta, batchSize, n_weights, n_labels,lambda/batchSize);
         weight[index]-=eta* deltaWeight;
         
-        printf("%d %f %f \n",index,deltaWeight,weight[index]);
+        //printf("%d %f %f \n",index,deltaWeight,weight[index]);
         
         free(data);
         free(label);

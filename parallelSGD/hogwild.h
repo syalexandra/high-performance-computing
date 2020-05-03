@@ -79,11 +79,11 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
   }
     __syncthreads();
     
-    
+  
     
   
   for(int i=0; i < n_labels; i++){
-      printf("r = %d for thread id: %d\n", r, tid);
+      
     if(tid < n_weights){
       smem[tid] = weight[i*n_weights + tid] * trainingData[r * n_weights + tid];
     } else {
@@ -91,13 +91,13 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
     }
       
        // printf("Block %d: smem[%d] = %f\n", blockIdx.x, tid, smem[tid]);
-    __syncthreads();
+    //__syncthreads();
     
     for(unsigned int s = blockDim.x/2; s>32; s>>=1){
         if(tid < s) {
           smem[tid] += smem[tid+s];
         }
-        __syncthreads();
+        //__syncthreads();
     }
       
     if(tid < 32) warpReduce(smem, tid);
@@ -105,9 +105,10 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
     if(tid == 0){
       numerator[i] = smem[tid];
     }
-    __syncthreads();
+    //__syncthreads();
   }
     
+    printf("r = %d for thread id: %d\n", r, tid);
     
   if(tid < n_labels)
     numerator[tid] = exp(numerator[tid]);

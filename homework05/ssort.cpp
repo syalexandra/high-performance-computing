@@ -45,23 +45,24 @@ int main( int argc, char *argv[]) {
         sendArray[i]=vec[(i+1)*interval-1];
     }
     
+    
+    
+    int *broadCastArray=(int*)malloc((p-1)*sizeof(int));
     if(rank==root){
         int* rootBuf=(int*)malloc(p*(p-1)*sizeof(int));
         MPI_Gather(sendArray,p-1,MPI_INT,rootBuf,p-1,MPI_INT,root,MPI_COMM_WORLD);
+        std::sort(rootBuf, p*(p-1));
+        
+        for(int i=0;i<p-1;i++){
+            broadCastArray[i]=vec[(i+1)*p-1];
+        }
     }
     
   // root process does a sort and picks (p-1) splitters (from the
   // p(p-1) received elements)
     
   // root process broadcasts splitters to all other processes
-    int *broadCastArray=(int*)malloc((p-1)*sizeof(int));
     
-    if(rank==root){
-        std::sort(rootBuf, p*(p-1));
-        for(int i=0;i<p-1;i++){
-            broadCastArray[i]=vec[(i+1)*p-1];
-        }
-    }
     
     MPI_Bcast(broadCastArray,p-1,MPI_INT,root,MPI_COMM_WORLD);
     for(int i=0;i<p-1;i++){

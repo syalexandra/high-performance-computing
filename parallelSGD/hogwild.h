@@ -73,10 +73,10 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
   curandState_t state;
   curand_init(loop, tid,0, &state);
   __shared__ int r;
-  if(tid == 0){
+  //if(tid == 0){
     r = curand(&state) % n_data;
     printf("r = %d for thread id: %d\n", r, tid);
-  }
+  //}
   for(int i=0; i < n_labels; i++){
     if(tid < n_weights){
       smem[tid] = weight[i*n_weights + tid] * trainingData[r * n_weights + tid];
@@ -98,6 +98,7 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
     }
     __syncthreads();
   }
+    
   if(tid < n_labels)
     numerator[tid] = exp(numerator[tid]);
   __syncthreads();

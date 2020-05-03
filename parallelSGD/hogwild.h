@@ -79,7 +79,7 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
   }
   for(int i=0; i < n_labels; i++){
     if(tid < n_weights){
-      smem[tid] = weight[i*n_weights + tid] * trainingData[r * n_weights + tid];
+      smem[tid] = weight[i*n_weights + tid] * trainingData[r[0] * n_weights + tid];
     } else {
       smem[tid] = 0;
     }
@@ -110,7 +110,7 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
   __syncthreads();
   if(tid < n_labels){
     numerator[tid] = numerator[tid] / denominator;
-    indicator[tid] = ((trainingLabel[r] == tid)?1:0);
+    indicator[tid] = ((trainingLabel[r[0]] == tid)?1:0);
   }
   __syncthreads();
     for(int j=0; j < n_labels; j++){

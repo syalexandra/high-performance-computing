@@ -73,10 +73,10 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
   curandState_t state;
   curand_init(loop, tid,0, &state);
   __shared__ int r[1];
-  if(tid == 0){
+  //if(tid == 0){
     r[0] = curand(&state) % n_data;
     printf("r = %d for thread id: %d\n", r[0], tid);
-  }
+  //}
   __syncthreads();
     
   for(int i=0; i < n_labels; i++){

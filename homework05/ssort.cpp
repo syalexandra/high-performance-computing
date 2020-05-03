@@ -25,10 +25,10 @@ int main( int argc, char *argv[]) {
     vec[i] = rand();
   }
   printf("rank: %d, first entry: %d\n", rank, vec[0]);
-
+    printf("sort start");
   // sort locally
   std::sort(vec, vec+N);
-
+    printf("sort finish");
   // sample p-1 entries from vector as the local splitters, i.e.,
   // every N/P-th entry of the sorted vector
 

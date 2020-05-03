@@ -28,7 +28,6 @@ int main( int argc, char *argv[]) {
   
   // sort locally
   std::sort(vec, vec+N);
-  printf("sort finish ");
   // sample p-1 entries from vector as the local splitters, i.e.,
   // every N/P-th entry of the sorted vector
 
@@ -85,6 +84,7 @@ int main( int argc, char *argv[]) {
     printf("\n");
     
     
+    
   // every process uses the obtained splitters to decide which
   // integers need to be sent to which other process (local bins).
   // Note that the vector is already locally sorted and so are the
@@ -97,7 +97,26 @@ int main( int argc, char *argv[]) {
   // counts and displacements. For a splitter s[i], the corresponding
   // send-displacement for the message to process (i+1) is then given by,
   // sdispls[i+1] = std::lower_bound(vec, vec+N, s[i]) - vec;
-
+    int* sdispls=(int*)malloc(p*sizeof(int));
+    for(int i=0;i<p;i++){
+        if(i==0){
+            sdispls[i]=std::lower_bound(vec,vec+N,broadCastArray[i])-vec;}
+        else if(i==p-1){
+            sdispls[i]=N-sdispls[i-1];}
+        else{
+            sdispls[i]=std::lower_bound(vec,vec+N,broadcastArray[i])-vec-sdispls[i-1];
+        }
+        
+    }
+    int* recvdispls=(int*)malloc(p*sizeof(int));
+    
+    MPI_Alltoall(sdispls,1,MPI_INT,recvdispls,1,MPI_INT,MPI_COMM_WORLD);
+    
+    printf("%d: ",rank);
+    for(int i=0;i<p;i++){
+        printf("%d ",recvdispls[i])
+    }
+    printf("\n");
   // send and receive: first use an MPI_Alltoall to share with every
   // process how many integers it should expect, and then use
   // MPI_Alltoallv to exchange the data

@@ -26,10 +26,9 @@ int main( int argc, char *argv[]) {
   }
   printf("rank: %d, first entry: %d\n", rank, vec[0]);
   
-  printf("sort start");
   // sort locally
   std::sort(vec, vec+N);
-  printf("sort finish");
+  printf("sort finish ");
   // sample p-1 entries from vector as the local splitters, i.e.,
   // every N/P-th entry of the sorted vector
 
@@ -49,7 +48,7 @@ int main( int argc, char *argv[]) {
     }
     printf("\n");
     
-    /*
+    
     
     int *broadCastArray=(int*)malloc((p-1)*sizeof(int));
     if(rank==root){
@@ -69,7 +68,7 @@ int main( int argc, char *argv[]) {
     
   // root process broadcasts splitters to all other processes
     
-    
+    /*
     MPI_Bcast(broadCastArray,p-1,MPI_INT,root,MPI_COMM_WORLD);
     for(int i=0;i<p-1;i++){
         printf("bcast: %d %d",rank, broadCastArray[i]);

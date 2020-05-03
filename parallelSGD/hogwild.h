@@ -72,10 +72,10 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
   //printf("Block %d: smem[%d] = a[%d] * b[%d] == %f += %f * %f\n", blockIdx.x, tid, idx, idx, smem[tid], a[idx], b[idx]);
   curandState_t state;
   curand_init(loop, tid,0, &state);
-  __shared__ int r;
+  __shared__ int r[1];
   if(tid == 0){
-    r = curand(&state) % n_data;
-    printf("r = %d for thread id: %d\n", r, tid);
+    r[0] = curand(&state) % n_data;
+    printf("r = %d for thread id: %d\n", r[0], tid);
   }
   for(int i=0; i < n_labels; i++){
     if(tid < n_weights){
@@ -116,10 +116,10 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
     for(int j=0; j < n_labels; j++){
       //Lock free
       if(tid == 307){
-        printf("first term for weight[307]= %f\n", (indicator[j] - numerator[j]) * trainingData[r * n_weights + tid]);
-          printf("%d %d %f %f %f \n",j,r,trainingData[r * n_weights + tid],weight[j * n_weights + tid],eta * ( (indicator[j] - numerator[j]) * trainingData[r * n_weights + tid] +(lambda * 2 * weight[j * n_weights + tid] / n_data) ));
+        printf("first term for weight[307]= %f\n", (indicator[j] - numerator[j]) * trainingData[r[0] * n_weights + tid]);
+          printf("%d %d %f %f %f \n",j,r[0],trainingData[r * n_weights + tid],weight[j * n_weights + tid],eta * ( (indicator[j] - numerator[j]) * trainingData[r[0] * n_weights + tid] +(lambda * 2 * weight[j * n_weights + tid] / n_data) ));
       }
-      weight[j * n_weights + tid] -= eta * ( (indicator[j] - numerator[j]) * trainingData[r * n_weights + tid] +
+      weight[j * n_weights + tid] -= eta * ( (indicator[j] - numerator[j]) * trainingData[r[0] * n_weights + tid] +
                                              (lambda * 2 * weight[j * n_weights + tid] / n_data) );//1/n_data makes a difference?
     }
   __syncthreads();

@@ -44,6 +44,7 @@ int main( int argc, char *argv[]) {
     
     for(int i=0;i<p-1;i++){
         sendArray[i]=vec[(i+1)*interval-1];
+        printf("sendArray: %d ",sendArray[i]);
     }
     
     
@@ -55,8 +56,10 @@ int main( int argc, char *argv[]) {
         std::sort(rootBuf, rootBuf+p*(p-1));
         
         for(int i=0;i<p-1;i++){
-            broadCastArray[i]=vec[(i+1)*p-1];
+            broadCastArray[i]=rootBuf[(i+1)*p-1];
+            printf("broadCastArray %d",broadCastArray[i]);
         }
+        
     }
     
   // root process does a sort and picks (p-1) splitters (from the
@@ -64,12 +67,12 @@ int main( int argc, char *argv[]) {
     
   // root process broadcasts splitters to all other processes
     
-    
+    /*
     MPI_Bcast(broadCastArray,p-1,MPI_INT,root,MPI_COMM_WORLD);
     for(int i=0;i<p-1;i++){
         printf("bcast: %d %d",rank, broadCastArray[i]);
     }
-    
+    */
     
   // every process uses the obtained splitters to decide which
   // integers need to be sent to which other process (local bins).

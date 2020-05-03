@@ -51,20 +51,19 @@ int main( int argc, char *argv[]) {
     
     int* rootBuf;
     int *broadCastArray=(int*)malloc((p-1)*sizeof(int));
+    
     if(rank==root){
         rootBuf=(int*)malloc(p*(p-1)*sizeof(int));
     }
     MPI_Gather(sendArray,p-1,MPI_INT,rootBuf,p-1,MPI_INT,root,MPI_COMM_WORLD);
-    printf("enter %d\n",rank);
     
     if(rank==root){
+    
+        std::sort(rootBuf, rootBuf+p*(p-1));
         for(int i=0;i<p*(p-1);i++){
             printf("%d ",rootBuf[i]);
         }
-    
-        printf("exit \n");
-        std::sort(rootBuf, rootBuf+p*(p-1));
-            
+        
         for(int i=0;i<p-1;i++){
             broadCastArray[i]=rootBuf[(i+1)*p-1];
             printf("broadCastArray %d",broadCastArray[i]);

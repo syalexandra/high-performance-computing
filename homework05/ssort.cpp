@@ -44,9 +44,9 @@ int main( int argc, char *argv[]) {
     
     for(int i=0;i<p-1;i++){
         sendArray[i]=vec[(i+1)*interval-1];
-        printf("sendArray: %d ",sendArray[i]);
+        //printf("sendArray: %d ",sendArray[i]);
     }
-    printf("\n");
+    //printf("\n");
     
     
     int* rootBuf;
@@ -77,11 +77,12 @@ int main( int argc, char *argv[]) {
     
   // root process broadcasts splitters to all other processes
     
-    /*
+    
     MPI_Bcast(broadCastArray,p-1,MPI_INT,root,MPI_COMM_WORLD);
     for(int i=0;i<p-1;i++){
         printf("bcast: %d %d",rank, broadCastArray[i]);
     }
+    printf("\n");
     
     
   // every process uses the obtained splitters to decide which
@@ -104,7 +105,7 @@ int main( int argc, char *argv[]) {
   // do a local sort of the received data
 
   // every process writes its result to a file
-*/
+
   free(vec);
   MPI_Finalize();
   return 0;

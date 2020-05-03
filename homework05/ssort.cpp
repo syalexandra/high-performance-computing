@@ -36,9 +36,7 @@ int main( int argc, char *argv[]) {
   // process; use for instance an MPI_Gather
     int root=0;
     
-    if(rank==root){
-        int* rootBuf=(int*)malloc(p*(p-1)*sizeof(int));
-    }
+    
     
     int interval=N/(p-1);
     int *sendArray=(int*)malloc((p-1)*sizeof(int));
@@ -47,7 +45,11 @@ int main( int argc, char *argv[]) {
         sendArray[i]=vec[(i+1)*interval-1];
     }
     
-    MPI_Gather(sendArray,p-1,MPI_INT,rootBuf,p-1,MPI_INT,root,MPI_COMM_WORLD);
+    if(rank==root){
+        int* rootBuf=(int*)malloc(p*(p-1)*sizeof(int));
+        MPI_Gather(sendArray,p-1,MPI_INT,rootBuf,p-1,MPI_INT,root,MPI_COMM_WORLD);
+    }
+    
   // root process does a sort and picks (p-1) splitters (from the
   // p(p-1) received elements)
     

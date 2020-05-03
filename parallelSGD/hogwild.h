@@ -77,6 +77,8 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
     r[0] = curand(&state) % n_data;
     printf("r = %d for thread id: %d\n", r[0], tid);
   }
+  __syncthreads();
+    
   for(int i=0; i < n_labels; i++){
     if(tid < n_weights){
       smem[tid] = weight[i*n_weights + tid] * trainingData[r[0] * n_weights + tid];

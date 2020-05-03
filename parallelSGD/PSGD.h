@@ -156,6 +156,7 @@ public:
 			for(int j=0; j<n_data; j++){
 				maxProb = 0;
 				probSum = 0;
+                maxIndex=0;
 				for(int i=0;i<n_labels;i++){
 					prob_exponent=0;//necessary
 					for(int k=0;k<n_weights;k++){
@@ -163,11 +164,14 @@ public:
 					}
 					probList[i] = exp(prob_exponent);
 					if(probList[i] > maxProb)
-						maxProb = probList[i];
+                        {maxProb = probList[i];
+                         maxIndex=i;}
+                        
 					probSum += probList[i];
 				}
 				//probList[] has to be divided by probSum at the end if it have to be used.
-				if(probList[testingLabels[j]] == maxProb)
+				//if(probList[testingLabels[j]] == maxProb)
+                if(testingLabels[j]==maxIndex)
 					correct_data++;
 			}
 		}

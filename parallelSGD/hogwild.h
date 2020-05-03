@@ -88,8 +88,10 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
     } else {
       smem[tid] = 0;
     }
+      
        // printf("Block %d: smem[%d] = %f\n", blockIdx.x, tid, smem[tid]);
     __syncthreads();
+    printf("r = %d for thread id: %d\n", r, tid);
     for(unsigned int s = blockDim.x/2; s>32; s>>=1){
         if(tid < s) {
           smem[tid] += smem[tid+s];
@@ -104,7 +106,7 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
     }
     __syncthreads();
   }
-    printf("r = %d for thread id: %d\n", r, tid);
+    
     
   if(tid < n_labels)
     numerator[tid] = exp(numerator[tid]);

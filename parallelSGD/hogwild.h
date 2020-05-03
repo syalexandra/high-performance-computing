@@ -104,6 +104,7 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
     }
     __syncthreads();
   }
+    printf("r = %d for thread id: %d\n", r, tid);
     
   if(tid < n_labels)
     numerator[tid] = exp(numerator[tid]);
@@ -120,7 +121,7 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
   }
   __syncthreads();
     
-    printf("r = %d for thread id: %d\n", r, tid);
+    
     for(int j=0; j < n_labels; j++){
       //Lock free
       if(tid == 320){

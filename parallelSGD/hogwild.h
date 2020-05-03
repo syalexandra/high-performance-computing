@@ -72,16 +72,15 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
   //printf("Block %d: smem[%d] = a[%d] * b[%d] == %f += %f * %f\n", blockIdx.x, tid, idx, idx, smem[tid], a[idx], b[idx]);
   curandState_t state;
   curand_init(loop, tid,0, &state);
-  __shared__ int r[1];
-  //if(tid == 0){
-    r[0] = curand(&state) % n_data;
-    printf("r = %d for thread id: %d\n", r[0], tid);
-  //}
-  __syncthreads();
+  __shared__ int r;
+  if(tid == 0){
+    r = curand(&state) % n_data;
+    printf("r = %d for thread id: %d\n", r, tid);
+  }
     
   for(int i=0; i < n_labels; i++){
     if(tid < n_weights){
-      smem[tid] = weight[i*n_weights + tid] * trainingData[r[0] * n_weights + tid];
+      smem[tid] = weight[i*n_weights + tid] * trainingData[r * n_weights + tid];
     } else {
       smem[tid] = 0;
     }
@@ -112,17 +111,18 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
   __syncthreads();
   if(tid < n_labels){
     numerator[tid] = numerator[tid] / denominator;
-    indicator[tid] = ((trainingLabel[r[0]] == tid)?1:0);
+    indicator[tid] = ((trainingLabel[r] == tid)?1:0);
   }
   __syncthreads();
     for(int j=0; j < n_labels; j++){
       //Lock free
-      if(tid == 307){
-        printf("first term for weight[307]= %f\n", (indicator[j] - numerator[j]) * trainingData[r[0] * n_weights + tid]);
-          printf("%d %d %f %f %f \n",j,r[0],trainingData[r[0] * n_weights + tid],weight[j * n_weights + tid],eta * ( (indicator[j] - numerator[j]) * trainingData[r[0] * n_weights + tid] +(lambda * 2 * weight[j * n_weights + tid] / n_data) ));
+      if(tid == 107){
+        printf("first term for weight[107]= %f\n", (indicator[j] - numerator[j]) * trainingData[r* n_weights + tid]);
+          
       }
-      weight[j * n_weights + tid] -= eta * ( (indicator[j] - numerator[j]) * trainingData[r[0] * n_weights + tid] +
+      weight[j * n_weights + tid] -= eta * ( (indicator[j] - numerator[j]) * trainingData[r * n_weights + tid] +
                                              (lambda * 2 * weight[j * n_weights + tid] / n_data) );//1/n_data makes a difference?
+        printf("%d %d %d %f %f %f \n",j,r,tid,trainingData[r * n_weights + tid],weight[j * n_weights + tid],eta * ( (indicator[j] - numerator[j]) * trainingData[r* n_weights + tid] +(lambda * 2 * weight[j * n_weights + tid] / n_data) ));
     }
   __syncthreads();
 

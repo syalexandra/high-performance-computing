@@ -28,7 +28,6 @@ int main( int argc, char *argv[]) {
   
   printf("sort start");
   // sort locally
-    /*
   std::sort(vec, vec+N);
   printf("sort finish");
   // sample p-1 entries from vector as the local splitters, i.e.,
@@ -36,7 +35,7 @@ int main( int argc, char *argv[]) {
 
   // every process communicates the selected entries to the root
   // process; use for instance an MPI_Gather
-    
+    /*
     int root=0;
     
     

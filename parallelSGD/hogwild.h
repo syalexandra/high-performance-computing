@@ -80,7 +80,7 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
     __syncthreads();
     
     
-    
+    printf("r = %d for thread id: %d\n", r, tid);
   
   for(int i=0; i < n_labels; i++){
     if(tid < n_weights){
@@ -88,7 +88,7 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
     } else {
       smem[tid] = 0;
     }
-      printf("r = %d for thread id: %d\n", r, tid);
+      
        // printf("Block %d: smem[%d] = %f\n", blockIdx.x, tid, smem[tid]);
     __syncthreads();
     

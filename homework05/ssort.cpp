@@ -49,11 +49,10 @@ int main( int argc, char *argv[]) {
     printf("\n");
     
     
-    
+    int* rootBuf
     int *broadCastArray=(int*)malloc((p-1)*sizeof(int));
     if(rank==root){
-        
-        int* rootBuf=(int*)malloc(p*(p-1)*sizeof(int));
+        rootBuf=(int*)malloc(p*(p-1)*sizeof(int));
     }
     MPI_Gather(sendArray,p-1,MPI_INT,rootBuf,p-1,MPI_INT,root,MPI_COMM_WORLD);
     printf("enter %d\n",rank);

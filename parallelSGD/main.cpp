@@ -73,7 +73,7 @@ int main(int argc, const char * argv[]) {
     */
     
     double eta;
-    eta=0.01;
+    eta=0.1;
     //printf("\nEnter learning rate (eta = 0.001):\n");
     //scanf("%lf", &eta);
     //double loss;

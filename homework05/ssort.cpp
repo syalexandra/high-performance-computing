@@ -60,11 +60,11 @@ int main( int argc, char *argv[]) {
     if(rank==root){
     
         std::sort(rootBuf, rootBuf+p*(p-1));
-        /*
+        
         for(int i=0;i<p*(p-1);i++){
             printf("%d ",rootBuf[i]);
         }
-         */
+        printf("\n");
         
         for(int i=0;i<p-1;i++){
             broadCastArray[i]=rootBuf[(i+1)*p-1];

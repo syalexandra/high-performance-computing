@@ -43,7 +43,7 @@ int main( int argc, char *argv[]) {
     int *sendArray=(int*)malloc((p-1)*sizeof(int));
     
     for(int i=0;i<p-1;i++){
-        sendArray[i]=vec[(i+1)*interval-1];
+        sendArray[i]=vec[(i+1)*interval-interval/2];
         //printf("sendArray: %d ",sendArray[i]);
     }
     //printf("\n");
@@ -67,7 +67,7 @@ int main( int argc, char *argv[]) {
         printf("\n");
         
         for(int i=0;i<p-1;i++){
-            broadCastArray[i]=rootBuf[(i+1)*p-1];
+            broadCastArray[i]=rootBuf[(i+1)*p-p/2];
             //printf("broadCastArray %d",broadCastArray[i]);
         }
     }

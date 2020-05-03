@@ -49,7 +49,7 @@ int main( int argc, char *argv[]) {
     printf("\n");
     
     
-    int* rootBuf
+    int* rootBuf;
     int *broadCastArray=(int*)malloc((p-1)*sizeof(int));
     if(rank==root){
         rootBuf=(int*)malloc(p*(p-1)*sizeof(int));

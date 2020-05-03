@@ -14,7 +14,7 @@ int main( int argc, char *argv[]) {
 
   // Number of random numbers per processor (this should be increased
   // for actual tests or could be passed in through the command line
-  int N = 10;
+  int N = 100;
 
   int* vec = (int*)malloc(N*sizeof(int));
   // seed random number generator differently on every core
@@ -60,13 +60,15 @@ int main( int argc, char *argv[]) {
     if(rank==root){
     
         std::sort(rootBuf, rootBuf+p*(p-1));
+        /*
         for(int i=0;i<p*(p-1);i++){
             printf("%d ",rootBuf[i]);
         }
+         */
         
         for(int i=0;i<p-1;i++){
             broadCastArray[i]=rootBuf[(i+1)*p-1];
-            printf("broadCastArray %d",broadCastArray[i]);
+            //printf("broadCastArray %d",broadCastArray[i]);
         }
     }
     

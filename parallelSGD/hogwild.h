@@ -79,7 +79,7 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
   }
     __syncthreads();
     
-    printf("r = %d for thread id: %d\n", r, tid);
+    
     
   
   for(int i=0; i < n_labels; i++){
@@ -96,6 +96,7 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
         }
         __syncthreads();
     }
+      
     if(tid < 32) warpReduce(smem, tid);
     __syncthreads();
     if(tid == 0){
@@ -118,6 +119,8 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
     indicator[tid] = ((trainingLabel[r] == tid)?1:0);
   }
   __syncthreads();
+    
+    printf("r = %d for thread id: %d\n", r, tid);
     for(int j=0; j < n_labels; j++){
       //Lock free
       if(tid == 320){

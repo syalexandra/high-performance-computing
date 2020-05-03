@@ -34,7 +34,7 @@ int main( int argc, char *argv[]) {
 
   // every process communicates the selected entries to the root
   // process; use for instance an MPI_Gather
-    /*
+    
     int root=0;
     
     
@@ -69,7 +69,7 @@ int main( int argc, char *argv[]) {
     for(int i=0;i<p-1;i++){
         printf("bcast: %d %d",rank, broadCastArray[i]);
     }
-    */
+    
     
   // every process uses the obtained splitters to decide which
   // integers need to be sent to which other process (local bins).

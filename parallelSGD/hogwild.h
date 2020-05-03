@@ -116,13 +116,13 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
   __syncthreads();
     for(int j=0; j < n_labels; j++){
       //Lock free
-      if(tid == 107){
+      if(tid == 320){
         printf("first term for weight[107]= %f\n", (indicator[j] - numerator[j]) * trainingData[r* n_weights + tid]);
-          
+          printf("%d %d %d %f %f %f \n",j,r,tid,trainingData[r * n_weights + tid],weight[j * n_weights + tid],eta * ( (indicator[j] - numerator[j]) * trainingData[r* n_weights + tid] +(lambda * 2 * weight[j * n_weights + tid] / n_data) ));
       }
       weight[j * n_weights + tid] -= eta * ( (indicator[j] - numerator[j]) * trainingData[r * n_weights + tid] +
                                              (lambda * 2 * weight[j * n_weights + tid] / n_data) );//1/n_data makes a difference?
-        printf("%d %d %d %f %f %f \n",j,r,tid,trainingData[r * n_weights + tid],weight[j * n_weights + tid],eta * ( (indicator[j] - numerator[j]) * trainingData[r* n_weights + tid] +(lambda * 2 * weight[j * n_weights + tid] / n_data) ));
+        
     }
   __syncthreads();
 

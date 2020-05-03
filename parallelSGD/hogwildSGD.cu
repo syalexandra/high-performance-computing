@@ -189,7 +189,7 @@ int main(int argc, const char * argv[]) {
     	if(j %(n_iterations/5) == 0 || j == n_iterations-1){
           cudaMemcpy(weight, weight_d, weight_size*sizeof(double), cudaMemcpyDeviceToHost);
 	  cudaDeviceSynchronize();
-          printf("weight[1070] = %f\n", weight[1070]);
+          printf("weight[320] = %f\n", weight[320]);
 	  double loss_now = getLoss(weight, tempData, tempLabel, n_images, size_image+1,10, lambda);
 	  printf("Training (log)loss: %f\t thread:%d\n",loss_now, omp_get_thread_num());
 	  psgd.testGPU(weight, testingData, testingLabels, n_images_test, size_image+1, 10);

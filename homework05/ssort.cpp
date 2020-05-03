@@ -47,6 +47,7 @@ int main( int argc, char *argv[]) {
         sendArray[i]=vec[(i+1)*interval-1];
         printf("sendArray: %d ",sendArray[i]);
     }
+    printf("\n");
     
     /*
     

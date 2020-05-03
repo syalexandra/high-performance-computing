@@ -14,7 +14,7 @@ int main( int argc, char *argv[]) {
 
   // Number of random numbers per processor (this should be increased
   // for actual tests or could be passed in through the command line
-  int N = 100;
+  int N = 10;
 
   int* vec = (int*)malloc(N*sizeof(int));
   // seed random number generator differently on every core
@@ -48,7 +48,7 @@ int main( int argc, char *argv[]) {
         printf("sendArray: %d ",sendArray[i]);
     }
     
-    
+    /*
     
     int *broadCastArray=(int*)malloc((p-1)*sizeof(int));
     if(rank==root){
@@ -95,7 +95,7 @@ int main( int argc, char *argv[]) {
   // do a local sort of the received data
 
   // every process writes its result to a file
-
+*/
   free(vec);
   MPI_Finalize();
   return 0;

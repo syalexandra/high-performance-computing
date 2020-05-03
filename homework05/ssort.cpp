@@ -34,12 +34,39 @@ int main( int argc, char *argv[]) {
 
   // every process communicates the selected entries to the root
   // process; use for instance an MPI_Gather
-
+    int root=0;
+    
+    if(rank==root){
+        int* rootBuf=(int*)malloc(p*(p-1)*sizeof(int));
+    }
+    
+    int interval=N/(p-1);
+    int *sendArray=(int*)malloc((p-1)*sizeof(int));
+    
+    for(int i=0;i<p-1;i++){
+        sendArray[i]=vec[(i+1)*interval-1];
+    }
+    
+    MPI_Gather(sendArray,p-1,MPI_INT,rootBuf,p-1,MPI_INT,root,MPI_COMM_WORLD);
   // root process does a sort and picks (p-1) splitters (from the
   // p(p-1) received elements)
-
+    
   // root process broadcasts splitters to all other processes
-
+    int *broadCastArray=(int*)malloc((p-1)*sizeof(int));
+    
+    if(rank==root){
+        std::sort(rootBuf, p*(p-1));
+        for(int i=0;i<p-1;i++){
+            broadCastArray[i]=vec[(i+1)*p-1];
+        }
+    }
+    
+    MPI_Bcast(broadCastArray,p-1,MPI_INT,root,MPI_COMM_WORLD);
+    for(int i=0;i<p-1;i++){
+        printf("bcast: %d %d",rank, broadCastArray[i]);
+    }
+    
+    
   // every process uses the obtained splitters to decide which
   // integers need to be sent to which other process (local bins).
   // Note that the vector is already locally sorted and so are the

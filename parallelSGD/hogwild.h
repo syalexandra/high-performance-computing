@@ -117,7 +117,7 @@ __global__  void run_hogwild_one_processor(double* weight, const double* trainin
       //Lock free
       if(tid == 307){
         printf("first term for weight[307]= %f\n", (indicator[j] - numerator[j]) * trainingData[r[0] * n_weights + tid]);
-          printf("%d %d %f %f %f \n",j,r[0],trainingData[r * n_weights + tid],weight[j * n_weights + tid],eta * ( (indicator[j] - numerator[j]) * trainingData[r[0] * n_weights + tid] +(lambda * 2 * weight[j * n_weights + tid] / n_data) ));
+          printf("%d %d %f %f %f \n",j,r[0],trainingData[r[0] * n_weights + tid],weight[j * n_weights + tid],eta * ( (indicator[j] - numerator[j]) * trainingData[r[0] * n_weights + tid] +(lambda * 2 * weight[j * n_weights + tid] / n_data) ));
       }
       weight[j * n_weights + tid] -= eta * ( (indicator[j] - numerator[j]) * trainingData[r[0] * n_weights + tid] +
                                              (lambda * 2 * weight[j * n_weights + tid] / n_data) );//1/n_data makes a difference?

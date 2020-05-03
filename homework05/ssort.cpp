@@ -52,6 +52,7 @@ int main( int argc, char *argv[]) {
     
     int *broadCastArray=(int*)malloc((p-1)*sizeof(int));
     if(rank==root){
+        printf("enter %d\n",rank);
         int* rootBuf=(int*)malloc(p*(p-1)*sizeof(int));
         MPI_Gather(sendArray,p-1,MPI_INT,rootBuf,p-1,MPI_INT,root,MPI_COMM_WORLD);
         std::sort(rootBuf, rootBuf+p*(p-1));

@@ -112,7 +112,7 @@ int main( int argc, char *argv[]) {
         
     }
     
-    printf("%d: ",rank);
+    printf("send %d: ",rank);
     for(int i=0;i<p;i++){
         if(i==p-1){
             scounts[i]=N-sdispls[i];
@@ -122,21 +122,21 @@ int main( int argc, char *argv[]) {
         }
         printf("%d ",scounts[i]);
     }
+    printf("\n");
     
-    /*
     
     int* recvcounts=(int*)malloc(p*sizeof(int));
     
     MPI_Alltoall(scounts,1,MPI_INT,recvcounts,1,MPI_INT,MPI_COMM_WORLD);
     
     
-    printf("%d: ",rank);
+    printf("recv %d: ",rank);
     for(int i=0;i<p;i++){
         printf("%d ",recvcounts[i]);
     }
     
     printf("\n");
-     */
+    
   // send and receive: first use an MPI_Alltoall to share with every
   // process how many integers it should expect, and then use
   // MPI_Alltoallv to exchange the data

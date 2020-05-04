@@ -81,7 +81,7 @@ public:
 
                 double accum = 0;
                 for(int j=0;j<n_iterations;j++){
-                    for(int b=0;b<1;b++){
+                    for(int b=0;b<10;b++){
 					int index = rand() % n_data;//
 					//printf("index %d ",index);
 					//n_data is 60000, size_weights is 28*28+1, size_label is 10

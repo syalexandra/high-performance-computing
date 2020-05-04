@@ -114,7 +114,7 @@ int main( int argc, char *argv[]) {
     
     printf("%d: ",rank);
     for(int i=0;i<p;i++){
-        if(i==p){
+        if(i==p-1){
             scounts[i]=N-sdispls[i];
         }
         else{

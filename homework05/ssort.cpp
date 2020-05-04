@@ -118,7 +118,7 @@ int main( int argc, char *argv[]) {
         else{
             scounts[i]=sdispls[i+1]-sdispls[i];
         }
-        print("%d ",scounts[i]);
+        printf("%d ",scounts[i]);
     }
     
     

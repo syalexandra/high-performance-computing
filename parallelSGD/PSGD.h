@@ -150,6 +150,7 @@ public:
 		int correct_data = 0;
 		vector<double> probList(n_labels);
 		double prob_exponent, maxProb, probSum;
+        int maxIndex;
 		#pragma omp parallel num_threads(n_threads) reduction(+:correct_data)
 		{
 			#pragma omp for

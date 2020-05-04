@@ -37,7 +37,7 @@ public:
     void initialize(int n_weights,int n_labels){
         int seed =1;//chrono::system_clock::now().time_since_epoch().count();
         default_random_engine generator (seed);
-        normal_distribution<double> distribution (0.0,10);
+        normal_distribution<double> distribution (0.0,1.0);
         weight_size=n_weights*n_labels;
         weight.resize(weight_size);
         for(int i=0;i<weight_size;i++){
@@ -81,12 +81,11 @@ public:
 
                 double accum = 0;
                 for(int j=0;j<n_iterations;j++){
-                    for(int b=0;b<10;b++){
 					int index = rand() % n_data;//
 					//printf("index %d ",index);
 					//n_data is 60000, size_weights is 28*28+1, size_label is 10
 					//del w = -grad f. But, because of a minus when we update weights, this MISTAKE is fine.
-                        delta_weight=loss.getGradient(parallel_weight, trainingData[index], trainingLabels[index], n_data, n_weights, n_labels);
+                    delta_weight=loss.getGradient(parallel_weight, trainingData[index], trainingLabels[index], n_data, n_weights, n_labels);
 					if(j %(n_iterations/5) == 0 || j == n_iterations-1){
 						accum = 0;
 						for (int l = 0; l < weight_size; l++) {
@@ -105,21 +104,17 @@ public:
                     }
                     */
                     for(int k=0;k<weight_size;k++){
-                        parallel_weight[k] -= eta*delta_weight[k]/100.0;
+                        parallel_weight[k] -= eta*delta_weight[k];
                     }
                     /*if(j < 4){
                         for(int k = 490; k<493; k++){
                         	printf("weight[%d] = %f\n", k, parallel_weight[k]);
                         }
                     }*/
-                    }
-                    //Intermediate Output
-                    
-                    
 
+                    //Intermediate Output
 					if(j %(n_iterations/5) == 0 || j == n_iterations-1){
 						// l2-norm
-                        test(weight, trainingData, trainingLabels, n_data, n_weights, n_labels);
 						accum = 0;
 						for (int l = 0; l < weight_size; ++l) {
 							accum += parallel_weight[l] * parallel_weight[l];
@@ -130,21 +125,17 @@ public:
 										  n_weights,10);
 						printf("Training (log)loss: %f\t thread:%d\n",loss_now, omp_get_thread_num());
 						test(parallel_weight, testingData, testingLabels, n_data_test, n_weights, n_labels);
-                        //test(parallel_weight, trainingData, trainingLabels, n_data, n_weights, n_labels);
 					}
+                    //printf("delta_weight %f %f %f \n",parallel_weight[300],parallel_weight[301],parallel_weight[302]);
                 }
 				//printf("%d,delta_weight %f %f %f \n",omp_get_thread_num(),parallel_weight[300],parallel_weight[301],parallel_weight[302]);
-				
-                
-                #pragma omp critical
+				#pragma omp critical
 				{
 					for(int k=0;k<weight_size;k++){
 						weight[k] += parallel_weight[k]/n_threads;//Not a reduction? But the original values have to be added to. Careful.
 					}
-                    test(weight, trainingData, trainingLabels, n_data, n_weights, n_labels);
 					printf("weight[101] = %f\t thread:%d\n", weight[101], omp_get_thread_num());
 				}
-                
             }
         }
     }
@@ -159,14 +150,12 @@ public:
 		int correct_data = 0;
 		vector<double> probList(n_labels);
 		double prob_exponent, maxProb, probSum;
-        int maxIndex;
 		#pragma omp parallel num_threads(n_threads) reduction(+:correct_data)
 		{
 			#pragma omp for
 			for(int j=0; j<n_data; j++){
 				maxProb = 0;
 				probSum = 0;
-                maxIndex=0;
 				for(int i=0;i<n_labels;i++){
 					prob_exponent=0;//necessary
 					for(int k=0;k<n_weights;k++){
@@ -174,17 +163,12 @@ public:
 					}
 					probList[i] = exp(prob_exponent);
 					if(probList[i] > maxProb)
-                        {maxProb = probList[i];
-                         maxIndex=i;}
-                        
+						maxProb = probList[i];
 					probSum += probList[i];
 				}
 				//probList[] has to be divided by probSum at the end if it have to be used.
-				//if(probList[testingLabels[j]] == maxProb)
-                if(testingLabels[j]==maxIndex)
-                {
+				if(probList[testingLabels[j]] == maxProb)
 					correct_data++;
-                }
 			}
 		}
 		printf("%d correct out of %d.\t Testing accuracy: %f\t thread:%d\n", correct_data, n_data, (float)correct_data/n_data, omp_get_thread_num());

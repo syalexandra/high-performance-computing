@@ -98,25 +98,40 @@ int main( int argc, char *argv[]) {
   // send-displacement for the message to process (i+1) is then given by,
   // sdispls[i+1] = std::lower_bound(vec, vec+N, s[i]) - vec;
     int* sdispls=(int*)malloc(p*sizeof(int));
+    
     for(int i=0;i<p;i++){
         if(i==0){
-            sdispls[i]=std::lower_bound(vec,vec+N,broadCastArray[i])-vec;}
-        else if(i==p-1){
-            sdispls[i]=N-sdispls[i-1];}
+            sdispls[i]=0;
+        }
         else{
-            sdispls[i]=std::lower_bound(vec,vec+N,broadcastArray[i])-vec-sdispls[i-1];
+            sdispls[i]=std::lower_bound(vec,vec+N,broadcastArray[i-1])-vec;
         }
         
     }
-    int* recvdispls=(int*)malloc(p*sizeof(int));
-    
-    MPI_Alltoall(sdispls,1,MPI_INT,recvdispls,1,MPI_INT,MPI_COMM_WORLD);
     
     printf("%d: ",rank);
     for(int i=0;i<p;i++){
-        printf("%d ",recvdispls[i])
+        if(i==p){
+            scounts[i]=N-sdispls[i];
+        }
+        else{
+            scounts[i]=sdispls[i+1]-sdispls[i];
+        }
+        print("%d ",scounts[i]);
     }
-    printf("\n");
+    
+    
+    
+    int* recvcounts=(int*)malloc(p*sizeof(int));
+    
+    MPI_Alltoall(scounts,1,MPI_INT,recvcounts,1,MPI_INT,MPI_COMM_WORLD);
+    
+    
+    printf("%d: ",rank);
+    for(int i=0;i<p;i++){
+        printf("%d ",recvcounts[i])
+    }
+    printf("\n")
   // send and receive: first use an MPI_Alltoall to share with every
   // process how many integers it should expect, and then use
   // MPI_Alltoallv to exchange the data

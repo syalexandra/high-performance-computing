@@ -174,7 +174,10 @@ public:
 				//probList[] has to be divided by probSum at the end if it have to be used.
 				//if(probList[testingLabels[j]] == maxProb)
                 if(testingLabels[j]==maxIndex)
+                {
+                    printf("%d %d ",testingLabels[j],maxIndex);
 					correct_data++;
+                }
 			}
 		}
 		printf("%d correct out of %d.\t Testing accuracy: %f\t thread:%d\n", correct_data, n_data, (float)correct_data/n_data, omp_get_thread_num());

@@ -37,7 +37,7 @@ public:
     void initialize(int n_weights,int n_labels){
         int seed =1;//chrono::system_clock::now().time_since_epoch().count();
         default_random_engine generator (seed);
-        normal_distribution<double> distribution (0.0,1.0);
+        normal_distribution<double> distribution (0.0,10);
         weight_size=n_weights*n_labels;
         weight.resize(weight_size);
         for(int i=0;i<weight_size;i++){

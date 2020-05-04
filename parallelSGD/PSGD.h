@@ -128,7 +128,6 @@ public:
 						//test(parallel_weight, testingData, testingLabels, n_data_test, n_weights, n_labels);
                         //test(parallel_weight, trainingData, trainingLabels, n_data, n_weights, n_labels);
 					}
-                    //printf("delta_weight %f %f %f \n",parallel_weight[300],parallel_weight[301],parallel_weight[302]);
                 }
 				//printf("%d,delta_weight %f %f %f \n",omp_get_thread_num(),parallel_weight[300],parallel_weight[301],parallel_weight[302]);
 				#pragma omp critical
@@ -136,7 +135,7 @@ public:
 					for(int k=0;k<weight_size;k++){
 						weight[k] += parallel_weight[k]/n_threads;//Not a reduction? But the original values have to be added to. Careful.
 					}
-                    test(parallel_weight, trainingData, trainingLabels, n_data, n_weights, n_labels);
+                    test(weight, trainingData, trainingLabels, n_data, n_weights, n_labels);
 					printf("weight[101] = %f\t thread:%d\n", weight[101], omp_get_thread_num());
 				}
             }

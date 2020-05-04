@@ -105,7 +105,7 @@ int main( int argc, char *argv[]) {
             sdispls[i]=0;
         }
         else{
-            sdispls[i]=std::lower_bound(vec,vec+N,broadcastArray[i-1])-vec;
+            sdispls[i]=std::lower_bound(vec,vec+N,broadCastArray[i-1])-vec;
         }
         
     }

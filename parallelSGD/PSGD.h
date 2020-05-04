@@ -81,11 +81,12 @@ public:
 
                 double accum = 0;
                 for(int j=0;j<n_iterations;j++){
+                    for(int k=0;k<100;k++){
 					int index = rand() % n_data;//
 					//printf("index %d ",index);
 					//n_data is 60000, size_weights is 28*28+1, size_label is 10
 					//del w = -grad f. But, because of a minus when we update weights, this MISTAKE is fine.
-                    delta_weight=loss.getGradient(parallel_weight, trainingData[index], trainingLabels[index], n_data, n_weights, n_labels);
+                    delta_weight=loss.getGradient(parallel_weight, trainingData[index], trainingLabels[index], n_data, n_weights, n_labels)/100;
 					if(j %(n_iterations/5) == 0 || j == n_iterations-1){
 						accum = 0;
 						for (int l = 0; l < weight_size; l++) {
@@ -111,7 +112,7 @@ public:
                         	printf("weight[%d] = %f\n", k, parallel_weight[k]);
                         }
                     }*/
-
+                    }
                     //Intermediate Output
 					if(j %(n_iterations/5) == 0 || j == n_iterations-1){
 						// l2-norm
@@ -175,7 +176,6 @@ public:
 				//if(probList[testingLabels[j]] == maxProb)
                 if(testingLabels[j]==maxIndex)
                 {
-                    printf("%d %d ",testingLabels[j],maxIndex);
 					correct_data++;
                 }
 			}

@@ -117,7 +117,7 @@ public:
                     
                     
 
-					if(j %(n_iterations/5) == 0 || j == n_iterations-1){
+					if(j %(n_iterations/10) == 0 || j == n_iterations-1){
 						// l2-norm
                         test(weight, trainingData, trainingLabels, n_data, n_weights, n_labels);
 						accum = 0;

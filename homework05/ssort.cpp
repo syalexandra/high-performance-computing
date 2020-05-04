@@ -78,6 +78,7 @@ int main( int argc, char *argv[]) {
     
     
     MPI_Bcast(broadCastArray,p-1,MPI_INT,root,MPI_COMM_WORLD);
+    
     for(int i=0;i<p-1;i++){
         printf("bcast: %d %d",rank, broadCastArray[i]);
     }
@@ -99,7 +100,7 @@ int main( int argc, char *argv[]) {
   // sdispls[i+1] = std::lower_bound(vec, vec+N, s[i]) - vec;
     int* sdispls=(int*)malloc(p*sizeof(int));
     int* scounts=(int*)malloc(p*sizeof(int));
-    
+    /*
     for(int i=0;i<p;i++){
         if(i==0){
             sdispls[i]=0;
@@ -132,7 +133,9 @@ int main( int argc, char *argv[]) {
     for(int i=0;i<p;i++){
         printf("%d ",recvcounts[i]);
     }
+    
     printf("\n");
+     */
   // send and receive: first use an MPI_Alltoall to share with every
   // process how many integers it should expect, and then use
   // MPI_Alltoallv to exchange the data

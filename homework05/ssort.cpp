@@ -98,9 +98,10 @@ int main( int argc, char *argv[]) {
   // counts and displacements. For a splitter s[i], the corresponding
   // send-displacement for the message to process (i+1) is then given by,
   // sdispls[i+1] = std::lower_bound(vec, vec+N, s[i]) - vec;
+    /*
     int* sdispls=(int*)malloc(p*sizeof(int));
     int* scounts=(int*)malloc(p*sizeof(int));
-    /*
+    
     for(int i=0;i<p;i++){
         if(i==0){
             sdispls[i]=0;

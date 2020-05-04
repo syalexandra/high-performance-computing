@@ -98,6 +98,7 @@ int main( int argc, char *argv[]) {
   // send-displacement for the message to process (i+1) is then given by,
   // sdispls[i+1] = std::lower_bound(vec, vec+N, s[i]) - vec;
     int* sdispls=(int*)malloc(p*sizeof(int));
+    int* scounts=(int*)malloc(p*sizeof(int));
     
     for(int i=0;i<p;i++){
         if(i==0){
@@ -129,9 +130,9 @@ int main( int argc, char *argv[]) {
     
     printf("%d: ",rank);
     for(int i=0;i<p;i++){
-        printf("%d ",recvcounts[i])
+        printf("%d ",recvcounts[i]);
     }
-    printf("\n")
+    printf("\n");
   // send and receive: first use an MPI_Alltoall to share with every
   // process how many integers it should expect, and then use
   // MPI_Alltoallv to exchange the data

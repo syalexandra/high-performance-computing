@@ -129,7 +129,7 @@ public:
 						double loss_now = loss.getLoss(parallel_weight, trainingData, trainingLabels, n_data,
 										  n_weights,10);
 						printf("Training (log)loss: %f\t thread:%d\n",loss_now, omp_get_thread_num());
-						//test(parallel_weight, testingData, testingLabels, n_data_test, n_weights, n_labels);
+						test(parallel_weight, testingData, testingLabels, n_data_test, n_weights, n_labels);
                         //test(parallel_weight, trainingData, trainingLabels, n_data, n_weights, n_labels);
 					}
                 }

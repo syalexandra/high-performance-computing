@@ -124,9 +124,10 @@ public:
                             for(int k=0;k<weight_size;k++){
                                 weight[k] += parallel_weight[k]/n_threads;//Not a reduction? But the original values have to be added to. Careful.
                             }
-                            test(weight, trainingData, trainingLabels, n_data, n_weights, n_labels);
-                            printf("weight[101] = %f\t thread:%d\n", weight[101], omp_get_thread_num());
+                            
+                            //printf("weight[101] = %f\t thread:%d\n", weight[101], omp_get_thread_num());
                         }
+                        test(weight, trainingData, trainingLabels, n_data, n_weights, n_labels);
 						accum = 0;
 						for (int l = 0; l < weight_size; ++l) {
 							accum += parallel_weight[l] * parallel_weight[l];

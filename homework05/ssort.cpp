@@ -161,7 +161,7 @@ int main( int argc, char *argv[]) {
     std::sort(buffer_recv,buffer_recv+recv_length);
     double end_time = MPI_Wtime();
     
-    printf("time elapse : %d \n",end_time-start_time);
+    printf("time elapse : %f \n",end_time-start_time);
     /*
     printf("rank %d : ",rank);
     for(int i=0;i<recv_length;i++){

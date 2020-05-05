@@ -10,9 +10,9 @@
 #include <omp.h>
 #include <string>
 
-#define N 1024
+#define N (1UL<<15)
 
-#define BLOCK_SIZE 32
+#define BLOCK_SIZE (1UL<<10)
 
 __global__ void vec_inner_product(double* sum, const double* a, const double* b){
     

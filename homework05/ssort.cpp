@@ -167,22 +167,21 @@ int main( int argc, char *argv[]) {
     
     printf("\n");
     */
-    { // Write output to a file
-      FILE* fd = NULL;
-      char filename[256];
-      snprintf(filename, 256, "output%02d.txt", rank);
-      fd = fopen(filename,"w+");
+    // Write output to a file
+    FILE* fd = NULL;
+    char filename[256];
+    snprintf(filename, 256, "output%02d.txt", rank);
+    fd = fopen(filename,"w+");
 
-      if(NULL == fd) {
+    if(NULL == fd) {
         printf("Error opening file \n");
         return 1;
-      }
-
-      for(int n = 0; n <recv_length; ++n)
-        fprintf(fd, "  %f\n", buffer_recv[n]);
-
-      fclose(fd);
     }
+
+    for(int n = 0; n <recv_length; ++n)
+        fprintf(fd, "  %d\n", buffer_recv[n]);
+
+    fclose(fd);
     
     
   // send and receive: first use an MPI_Alltoall to share with every

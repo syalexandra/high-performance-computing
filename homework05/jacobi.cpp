@@ -15,7 +15,7 @@ double compute_residual(double *lu, int lN, double invhsq){
     
   for(i=1;i<=lN;i++){
       for (j = 1; j <= lN; j++){
-          tmp = ((4.0*lu[i*(lN+2)+j] - lu[(i-1)*(lN+2)+j] - lu[(i+1)*(lN+2)+j-1] - lu[i*(lN+2)+j+1])* invhsq - 1);
+          tmp = ((4.0*lu[i*(lN+2)+j] - lu[(i-1)*(lN+2)+j] - lu[(i+1)*(lN+2)+j]-lu[i*(lN+2)+j-1] - lu[i*(lN+2)+j+1])* invhsq - 1);
           lres += tmp * tmp;
       }
   }
@@ -77,7 +77,7 @@ int main(int argc, char * argv[]){
     
   int psqrt=sqrt(p);
   double h = 1.0 / (Nl*psqrt + 1);
-    printf("h : %f ",h);
+    printf("h : %f ",Nl*psqrt);
   double hsq = h * h;
   double invhsq = 1./hsq;
   double gres, gres0, tol = 1e-5;

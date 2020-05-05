@@ -68,7 +68,7 @@ int main() {
     #pragma omp parallel for schedule(static)
     for (long i = 0; i < N; i++)
     {
-      y[i] = 1/(i+2);
+      y[i] = 1.0/(i+2);
     }
     
     

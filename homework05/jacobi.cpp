@@ -65,14 +65,14 @@ int main(int argc, char * argv[]){
   double tt = MPI_Wtime();
     
   /* Allocation of vectors, including left/upper and right/lower ghost points */
-  double * lu    = (double *) calloc(sizeof(double), (Nl + 2)*(Nl + 2));
-  double * lunew = (double *) calloc(sizeof(double), (Nl+ 2)*(Nl+ 2));
+  double * lu    = (double *) malloc(sizeof(double), (Nl + 2)*(Nl + 2));
+  double * lunew = (double *) malloc(sizeof(double), (Nl+ 2)*(Nl+ 2));
   double * lutemp;
     
-    double * leftin = (double *) calloc(sizeof(double), Nl);
-     double * rightin = (double *) calloc(sizeof(double), Nl);
-     double * leftout = (double *) calloc(sizeof(double), Nl);
-     double * rightout = (double *) calloc(sizeof(double), Nl);
+    double * leftin = (double *) malloc(sizeof(double), Nl);
+     double * rightin = (double *) malloc(sizeof(double), Nl);
+     double * leftout = (double *) malloc(sizeof(double), Nl);
+     double * rightout = (double *) malloc(sizeof(double), Nl);
 
     
     
@@ -120,7 +120,7 @@ int main(int argc, char * argv[]){
         printf("%f ",leftout[i]);
     }
       printf("\n");
-        
+       
     if(mpirankY<psqrt-1){
         MPI_Send(&(rightout[0]), Nl, MPI_DOUBLE, mpirank+1, 125, MPI_COMM_WORLD);
         MPI_Recv(&(rightin[0]), Nl, MPI_DOUBLE, mpirank+1, 126, MPI_COMM_WORLD, &status2);
@@ -143,12 +143,12 @@ int main(int argc, char * argv[]){
       
     /* copy newu to u using pointer flipping */
     lutemp = lu; lu = lunew; lunew = lutemp;
-    if (0 == (iter % 10)) {
+    //if (0 == (iter % 10)) {
       gres = compute_residual(lu, Nl, invhsq);
       if (0 == mpirank) {
 	printf("Iter %d: Residual: %g\n", iter, gres);
       }
-    }
+    //}
   }
 
   /* Clean up */

@@ -70,9 +70,9 @@ int main(int argc, char * argv[]){
   double * lutemp;
     
     double * leftin = (double *) calloc(Nl,sizeof(double));
-     double * rightin = (double *) calloc(N1,sizeof(double));
-     double * leftout = (double *) calloc(N1,sizeof(double));
-     double * rightout = (double *) calloc(N1,sizeof(double));
+     double * rightin = (double *) calloc(Nl,sizeof(double));
+     double * leftout = (double *) calloc(Nl,sizeof(double));
+     double * rightout = (double *) calloc(Nl,sizeof(double));
 
     
     

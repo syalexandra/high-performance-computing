@@ -73,7 +73,7 @@ int main(int argc, char * argv[]){
     double * leftin = (double *) calloc(sizeof(double), Nl);
      double * rightin = (double *) calloc(sizeof(double), Nl);
      double * leftout = (double *) calloc(sizeof(double), Nl);
-     double * leftin = (double *) calloc(sizeof(double), Nl);
+     double * rightout = (double *) calloc(sizeof(double), Nl);
 
     
     
@@ -125,7 +125,7 @@ int main(int argc, char * argv[]){
 
     if(mpirankY>0){
         MPI_Send(&(leftout[0]), Nl, MPI_DOUBLE, mpirank-1, 126, MPI_COMM_WORLD);
-        MPI_Recv(&(leftin[0]), Nl, MPI_DOUBLE, mpirank01, 125, MPI_COMM_WORLD, &status2);
+        MPI_Recv(&(leftin[0]), Nl, MPI_DOUBLE, mpirank-1, 125, MPI_COMM_WORLD, &status2);
     }
       
     for(int i=0;i<Nl;i++){

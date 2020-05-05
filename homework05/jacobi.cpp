@@ -142,7 +142,7 @@ int main(int argc, char * argv[]){
         for(int i=0;i<Nl;i++){
             leftout[i]=lunew[(i+1)*(Nl+2)+1];
         }
-        x
+        
         MPI_Send(&(leftout[0]), Nl, MPI_DOUBLE, mpirank-1, 223, MPI_COMM_WORLD);
         MPI_Recv(&(leftin[0]), Nl, MPI_DOUBLE, mpirank-1, 224, MPI_COMM_WORLD, &status3);
         for(int i=0;i<Nl;i++){

@@ -76,7 +76,7 @@ int main(int argc, char * argv[]){
 
     
     
-  double h = 1.0 / (Nl + 1);
+  double h = 1.0 / (N + 1);
   double hsq = h * h;
   double invhsq = 1./hsq;
   double gres, gres0, tol = 1e-5;

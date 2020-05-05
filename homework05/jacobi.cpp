@@ -94,6 +94,8 @@ int main(int argc, char * argv[]){
             lunew[i*(Nl+2)+k]  = 0.25 * (hsq + lu[(i - 1)*(Nl+2)+k] + lu[(i + 1)*(Nl+2)+k]+lu[i*(Nl+2)+k-1]+lu[i*(Nl+2)+(k+1)]);
         }
     }
+      gres =compute_residual(lunew, Nl, invhsq);
+      printf("%f \n",gres);
       
       int psqrt=sqrt(p);
       int mpirankX=mpirank /psqrt;

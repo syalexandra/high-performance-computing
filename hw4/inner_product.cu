@@ -10,7 +10,7 @@
 #include <omp.h>
 #include <string>
 
-#define N (1UL<<12)
+#define N (1UL<<11)
 
 #define BLOCK_SIZE (1UL<<10)
 
@@ -55,7 +55,7 @@ int main() {
     double* x = (double*) malloc(N * sizeof(double));
     double* y = (double*) malloc(N * sizeof(double));
     
-    long Nb = (N+BLOCK_SIZE-1)/(BLOCK_SIZE);
+    long Nb = N/BLOCK_SIZE;
     
     double* z = (double*) malloc(Nb * sizeof(double));
         

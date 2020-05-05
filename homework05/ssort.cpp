@@ -102,6 +102,7 @@ int main( int argc, char *argv[]) {
     int* sdispls=(int*)malloc(p*sizeof(int));
     int* scounts=(int*)malloc(p*sizeof(int));
     
+    printf("send displacement %d: ",rank);
     for(int i=0;i<p;i++){
         if(i==0){
             sdispls[i]=0;
@@ -109,6 +110,7 @@ int main( int argc, char *argv[]) {
         else{
             sdispls[i]=std::lower_bound(vec,vec+N,broadCastArray[i-1])-vec;
         }
+        printf("%d ",sdispls[i]);
         
     }
     
@@ -149,10 +151,16 @@ int main( int argc, char *argv[]) {
         }
         recv_length+=recvcounts[i];
     }
-    printf("length of receive %d:",recv_length);
+    printf("rank %d length of receive %d:",rank,recv_length);
     
     int* buffer_recv=(int*)malloc(recv_length*sizeof(int));
     
+    MPI_Alltoall(vec,scounts,sdispls,MPI_INT,buffer_recv,recvcounts,rdispls,MPI_INT,MPI_COMM_WORLD);
+    
+    printf("rank %d : ",rank);
+    for(int i=0;i<recv_length;i++){
+        printf("%d ",buffer_recv[i]);
+    }
     
   // send and receive: first use an MPI_Alltoall to share with every
   // process how many integers it should expect, and then use

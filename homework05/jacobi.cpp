@@ -39,9 +39,9 @@ int main(int argc, char * argv[]){
   MPI_Get_processor_name(processor_name, &name_len);
   printf("Rank %d/%d running on %s.\n", mpirank, p, processor_name);
     
-    printf("Nl: \");
+    printf("Nl: \n");
   sscanf(argv[1], "%d", &Nl);
-    prinft("max_iteration: \");
+    printf("max_iteration: \n");
   sscanf(argv[2], "%d", &max_iters);
 
   /* compute number of unknowns handled by each process */

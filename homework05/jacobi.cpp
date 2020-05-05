@@ -156,7 +156,7 @@ int main(int argc, char * argv[]){
     /* copy newu to u using pointer flipping */
     
     lutemp = lu; lu = lunew; lunew = lutemp;
-    if (0 == (iter % 1000)) {
+    if (0 == (iter % 100)) {
       gres = compute_residual(lu, Nl, invhsq);
       if (0 == mpirank) {
 	printf("Iter %d: Residual: %g\n", iter, gres);

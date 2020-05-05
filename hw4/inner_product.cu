@@ -95,7 +95,7 @@ int main() {
     for(int i=0;i<Nb;i++){
         summ+=z[i];
     }
-    printf("sum: %f\n",summ);
+    printf("inner product: %f\n",summ);
     printf("GPU Bandwidth = %f GB/s\n", (N)*sizeof(double) / (omp_get_wtime()-tt)/1e9);
     
     

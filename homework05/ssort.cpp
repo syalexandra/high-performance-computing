@@ -14,7 +14,7 @@ int main( int argc, char *argv[]) {
 
   // Number of random numbers per processor (this should be increased
   // for actual tests or could be passed in through the command line
-  int N = 10;
+  int N = 10000;
 
   int* vec = (int*)malloc(N*sizeof(int));
   // seed random number generator differently on every core
@@ -26,6 +26,7 @@ int main( int argc, char *argv[]) {
   }
   printf("rank: %d, first entry: %d\n", rank, vec[0]);
   
+  double start_time = MPI_Wtime();
   // sort locally
   std::sort(vec, vec+N);
   // sample p-1 entries from vector as the local splitters, i.e.,
@@ -158,7 +159,9 @@ int main( int argc, char *argv[]) {
     MPI_Alltoallv(vec,scounts,sdispls,MPI_INT,buffer_recv,recvcounts,rdispls,MPI_INT,MPI_COMM_WORLD);
     
     std::sort(buffer_recv,buffer_recv+recv_length);
+    double end_time = MPI_Wtime();
     
+    printf("time elapse : %d \n",endtime-start_time);
     /*
     printf("rank %d : ",rank);
     for(int i=0;i<recv_length;i++){

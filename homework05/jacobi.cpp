@@ -123,13 +123,13 @@ int main(int argc, char * argv[]){
     }
       
     if(mpirankY<psqrt-1){
-        /*
+        
         for(int i=0;i<Nl;i++){
             rightout[i]=lunew[(i+1)*(Nl+2)+Nl];
         }
-         */
-        MPI_Send(&(rightout[0]), Nl, MPI_DOUBLE, mpirank+1, 125, MPI_COMM_WORLD);
-        MPI_Recv(&(rightin[0]), Nl, MPI_DOUBLE, mpirank+1, 126, MPI_COMM_WORLD, &status2);
+        
+        MPI_Send(&(rightout[0]), Nl, MPI_DOUBLE, mpirank+1, 224, MPI_COMM_WORLD);
+        MPI_Recv(&(rightin[0]), Nl, MPI_DOUBLE, mpirank+1, 223, MPI_COMM_WORLD, &status2);
         for(int i=0;i<Nl;i++){
             lunew[(i+1)*(Nl+2)+Nl+1]=rightin[i];
         }
@@ -138,13 +138,13 @@ int main(int argc, char * argv[]){
     
     
     if(mpirankY>0){
-        /*
+        
         for(int i=0;i<Nl;i++){
             leftout[i]=lunew[(i+1)*(Nl+2)+1];
         }
-         */
-        MPI_Send(&(leftout[0]), Nl, MPI_DOUBLE, mpirank-1, 126, MPI_COMM_WORLD);
-        MPI_Recv(&(leftin[0]), Nl, MPI_DOUBLE, mpirank-1, 125, MPI_COMM_WORLD, &status3);
+        x
+        MPI_Send(&(leftout[0]), Nl, MPI_DOUBLE, mpirank-1, 223, MPI_COMM_WORLD);
+        MPI_Recv(&(leftin[0]), Nl, MPI_DOUBLE, mpirank-1, 224, MPI_COMM_WORLD, &status3);
         for(int i=0;i<Nl;i++){
             lunew[(i+1)*(Nl+2)]=leftin[i];
         }

@@ -137,6 +137,22 @@ int main( int argc, char *argv[]) {
     
     printf("\n");
     
+    int* rdispls=(int*)malloc(p*sizeof(int));
+    int recv_length=0;
+    
+    for(int i=0;i<p;i++){
+        if(i==0){
+            rdispls[i]=0;
+        }
+        else{
+            rdispls[i]=rdispls[i-1]+recvcounts[i-1];
+        }
+        recv_length+=recvcounts[i];
+    }
+    printf("length of receive %d:",recv_length);
+    
+    int* buffer_recv=(int*)malloc(recv_length*sizeof(int));
+    
     
   // send and receive: first use an MPI_Alltoall to share with every
   // process how many integers it should expect, and then use

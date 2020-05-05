@@ -90,13 +90,6 @@ int main(int argc, char * argv[]){
     /* Jacobi step for local points */
       
       
-    for(int i=0;i<Nl;i++){
-        leftin[i]=0;
-        leftout[i]=0;
-        rightin[i]=0;
-        rightout[i]=0;
-    }
-      
       
     for (int i = 1; i <= Nl; i++){
         for(int k=1;k<=Nl;k++){
@@ -153,7 +146,7 @@ int main(int argc, char * argv[]){
       
       
     /* copy newu to u using pointer flipping */
-    
+    /*
     lutemp = lu; lu = lunew; lunew = lutemp;
     if (0 == (iter % 10)) {
       gres = compute_residual(lu, Nl, invhsq);
@@ -167,7 +160,7 @@ int main(int argc, char * argv[]){
 	printf("Iter %d: Residual: %g\n", iter, gres);
       }
     }
-     
+     */
   }
      
 

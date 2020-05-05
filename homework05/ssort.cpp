@@ -155,7 +155,7 @@ int main( int argc, char *argv[]) {
     
     int* buffer_recv=(int*)malloc(recv_length*sizeof(int));
     
-    MPI_Alltoall(vec,scounts,sdispls,MPI_INT,buffer_recv,recvcounts,rdispls,MPI_INT,MPI_COMM_WORLD);
+    MPI_Alltoallv(vec,scounts,sdispls,MPI_INT,buffer_recv,recvcounts,rdispls,MPI_INT,MPI_COMM_WORLD);
     
     printf("rank %d : ",rank);
     for(int i=0;i<recv_length;i++){

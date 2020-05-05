@@ -27,7 +27,7 @@ double compute_residual(double *lu, int lN, double invhsq){
 
 int main(int argc, char * argv[]){
   int mpirank, j,p, Nl, N,lN, iter, max_iters;
-  MPI_Status status, status1;
+  MPI_Status status, status1,status2,status3;
 
   MPI_Init(&argc, &argv);
   MPI_Comm_rank(MPI_COMM_WORLD, &mpirank);

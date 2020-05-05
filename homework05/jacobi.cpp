@@ -138,7 +138,7 @@ int main(int argc, char * argv[]){
             lunew[(i+1)*(Nl+2)]=leftin[i];
         }
     }
-      
+      MPI_Barrier(MPI_COMM_WORLD);
       
       
     /* copy newu to u using pointer flipping */

@@ -77,6 +77,7 @@ int main(int argc, char * argv[]){
     
   int psqrt=sqrt(p);
   double h = 1.0 / (Nl*psqrt + 1);
+    printf("h : %d ",h);
   double hsq = h * h;
   double invhsq = 1./hsq;
   double gres, gres0, tol = 1e-5;

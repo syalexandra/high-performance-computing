@@ -19,7 +19,6 @@ double compute_residual(double *lu, int lN, double invhsq){
           lres += tmp * tmp;
       }
   }
-    printf("les: %f",lres);
   /* use allreduce for convenience; a reduce would also be sufficient */
   MPI_Allreduce(&lres, &gres, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
   return sqrt(gres);
@@ -95,7 +94,7 @@ int main(int argc, char * argv[]){
         }
     }
       gres =compute_residual(lunew, Nl, invhsq);
-      printf("%f \n",gres);
+      //printf("%f \n",gres);
       
       int psqrt=sqrt(p);
       int mpirankX=mpirank /psqrt;
@@ -114,16 +113,20 @@ int main(int argc, char * argv[]){
       MPI_Recv(&(lunew[1]), Nl, MPI_DOUBLE, mpirank-psqrt, 124, MPI_COMM_WORLD, &status1);
     }
       
-      
+      printf("rank %d ",mpirank);
     for(int i=0;i<Nl;i++){
         leftout[i]=lunew[(i+1)*(Nl+2)+1];
         rightout[i]=lunew[(i+1)*(Nl+2)+Nl];
+        printf("%f ",leftout[i]);
     }
+      printf("\n");
         
     if(mpirankY<psqrt-1){
         MPI_Send(&(rightout[0]), Nl, MPI_DOUBLE, mpirank+1, 125, MPI_COMM_WORLD);
         MPI_Recv(&(rightin[0]), Nl, MPI_DOUBLE, mpirank+1, 126, MPI_COMM_WORLD, &status2);
-        
+        for(int i=0;i<Nl;i++){
+            lunew[(i+1)*(Nl+2)+Nl+1]=rightin[i];
+        }
     }
       
       
@@ -131,13 +134,10 @@ int main(int argc, char * argv[]){
     if(mpirankY>0){
         MPI_Send(&(leftout[0]), Nl, MPI_DOUBLE, mpirank-1, 126, MPI_COMM_WORLD);
         MPI_Recv(&(leftin[0]), Nl, MPI_DOUBLE, mpirank-1, 125, MPI_COMM_WORLD, &status3);
+        for(int i=0;i<Nl;i++){
+            lunew[(i+1)*(Nl+2)]=leftin[i];
+        }
     }
-      
-    for(int i=0;i<Nl;i++){
-        lunew[(i+1)*(Nl+2)]=leftin[i];
-        lunew[(i+1)*(Nl+2)+Nl+1]=rightin[i];
-    }
-      
       
       
       

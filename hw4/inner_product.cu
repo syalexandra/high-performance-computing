@@ -55,7 +55,7 @@ int main() {
     double* x = (double*) malloc(N * sizeof(double));
     double* y = (double*) malloc(N * sizeof(double));
     
-    Nb = (N+BLOCK_SIZE-1)/(BLOCK_SIZE);
+    long Nb = (N+BLOCK_SIZE-1)/(BLOCK_SIZE);
     
     double* z = (double*) malloc(Nb * sizeof(double));
         
@@ -79,7 +79,7 @@ int main() {
     cudaMalloc(&z_d, Nb * sizeof(double));
     
 
-    tt = omp_get_wtime();
+    double tt = omp_get_wtime();
     
     cudaMemcpy(x_d, x, N*sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(y_d, y, N*sizeof(double), cudaMemcpyHostToDevice);

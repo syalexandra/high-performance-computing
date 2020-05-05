@@ -59,12 +59,12 @@ int main( int argc, char *argv[]) {
     if(rank==root){
     
         std::sort(rootBuf, rootBuf+p*(p-1));
-        
+        /*
         for(int i=0;i<p*(p-1);i++){
             printf("%d ",rootBuf[i]);
         }
         printf("\n");
-        
+        */
         for(int i=0;i<p-1;i++){
             broadCastArray[i]=rootBuf[(i+1)*p-p/2];
             //printf("broadCastArray %d",broadCastArray[i]);
@@ -78,12 +78,12 @@ int main( int argc, char *argv[]) {
     
     
     MPI_Bcast(broadCastArray,p-1,MPI_INT,root,MPI_COMM_WORLD);
-    
+    /*
     for(int i=0;i<p-1;i++){
         printf("bcast: %d %d",rank, broadCastArray[i]);
     }
     printf("\n");
-    
+    */
     
     
   // every process uses the obtained splitters to decide which
@@ -102,7 +102,7 @@ int main( int argc, char *argv[]) {
     int* sdispls=(int*)malloc(p*sizeof(int));
     int* scounts=(int*)malloc(p*sizeof(int));
     
-    printf("send displacement %d: ",rank);
+    //printf("send displacement %d: ",rank);
     for(int i=0;i<p;i++){
         if(i==0){
             sdispls[i]=0;
@@ -110,11 +110,11 @@ int main( int argc, char *argv[]) {
         else{
             sdispls[i]=std::lower_bound(vec,vec+N,broadCastArray[i-1])-vec;
         }
-        printf("%d ",sdispls[i]);
+        //printf("%d ",sdispls[i]);
         
     }
     
-    printf("send %d: ",rank);
+    //printf("send %d: ",rank);
     for(int i=0;i<p;i++){
         if(i==p-1){
             scounts[i]=N-sdispls[i];
@@ -122,23 +122,23 @@ int main( int argc, char *argv[]) {
         else{
             scounts[i]=sdispls[i+1]-sdispls[i];
         }
-        printf("%d ",scounts[i]);
+        //printf("%d ",scounts[i]);
     }
-    printf("\n");
+    //printf("\n");
     
     
     int* recvcounts=(int*)malloc(p*sizeof(int));
     
     MPI_Alltoall(scounts,1,MPI_INT,recvcounts,1,MPI_INT,MPI_COMM_WORLD);
     
-    
+    /*
     printf("recv %d: ",rank);
     for(int i=0;i<p;i++){
         printf("%d ",recvcounts[i]);
     }
     
     printf("\n");
-    
+    */
     int* rdispls=(int*)malloc(p*sizeof(int));
     int recv_length=0;
     
@@ -151,7 +151,7 @@ int main( int argc, char *argv[]) {
         }
         recv_length+=recvcounts[i];
     }
-    printf("rank %d length of receive %d:\n",rank,recv_length);
+    //printf("rank %d length of receive %d:\n",rank,recv_length);
     
     int* buffer_recv=(int*)malloc(recv_length*sizeof(int));
     
@@ -159,12 +159,31 @@ int main( int argc, char *argv[]) {
     
     std::sort(buffer_recv,buffer_recv+recv_length);
     
+    /*
     printf("rank %d : ",rank);
     for(int i=0;i<recv_length;i++){
         printf("%d ",buffer_recv[i]);
     }
     
     printf("\n");
+    */
+    { // Write output to a file
+      FILE* fd = NULL;
+      char filename[256];
+      snprintf(filename, 256, "output%02d.txt", rank);
+      fd = fopen(filename,"w+");
+
+      if(NULL == fd) {
+        printf("Error opening file \n");
+        return 1;
+      }
+
+      for(n = 0; n <recv_length; ++n)
+        fprintf(fd, "  %f\n", buffer_recv[n]);
+
+      fclose(fd);
+    }
+    
     
   // send and receive: first use an MPI_Alltoall to share with every
   // process how many integers it should expect, and then use
@@ -174,7 +193,11 @@ int main( int argc, char *argv[]) {
 
   // every process writes its result to a file
 
-  free(vec);
-  MPI_Finalize();
-  return 0;
+    free(vec);
+    free(sendArray);
+    free(broadCastArray);
+    free(sdispls);
+    free(buffer_recv);
+    MPI_Finalize();
+    return 0;
 }

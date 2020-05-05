@@ -77,7 +77,6 @@ int main(int argc, char * argv[]){
     
   int psqrt=sqrt(p);
   double h = 1.0 / (Nl*psqrt + 1);
-    printf("h : %f ",Nl*psqrt);
   double hsq = h * h;
   double invhsq = 1./hsq;
   double gres, gres0, tol = 1e-5;
@@ -124,11 +123,11 @@ int main(int argc, char * argv[]){
     }
       
     if(mpirankY<psqrt-1){
-        
+        /*
         for(int i=0;i<Nl;i++){
             rightout[i]=lunew[(i+1)*(Nl+2)+Nl];
         }
-        
+        */
         MPI_Send(&(rightout[0]), Nl, MPI_DOUBLE, mpirank+1, 224, MPI_COMM_WORLD);
         MPI_Recv(&(rightin[0]), Nl, MPI_DOUBLE, mpirank+1, 223, MPI_COMM_WORLD, &status2);
         for(int i=0;i<Nl;i++){
@@ -139,11 +138,11 @@ int main(int argc, char * argv[]){
     
     
     if(mpirankY>0){
-        
+        /*
         for(int i=0;i<Nl;i++){
             leftout[i]=lunew[(i+1)*(Nl+2)+1];
         }
-        
+        */
         MPI_Send(&(leftout[0]), Nl, MPI_DOUBLE, mpirank-1, 223, MPI_COMM_WORLD);
         MPI_Recv(&(leftin[0]), Nl, MPI_DOUBLE, mpirank-1, 224, MPI_COMM_WORLD, &status3);
         for(int i=0;i<Nl;i++){
@@ -157,7 +156,7 @@ int main(int argc, char * argv[]){
     /* copy newu to u using pointer flipping */
     
     lutemp = lu; lu = lunew; lunew = lutemp;
-    if (0 == (iter % 10)) {
+    if (0 == (iter % 1000)) {
       gres = compute_residual(lu, Nl, invhsq);
       if (0 == mpirank) {
 	printf("Iter %d: Residual: %g\n", iter, gres);

@@ -89,7 +89,7 @@ int main(int argc, char * argv[]){
   for (iter = 0; iter < max_iters && gres/gres0 > tol; iter++) {
 
     /* Jacobi step for local points */
-    for (i = 1; i <= Nl; i++){
+    for (int i = 1; i <= Nl; i++){
       lunew[i]  = 0.25 * (hsq + lu[(i - 1)*(Nl+2)+j] + lu[(i + 1)*(Nl+2)+j]+lu[i*(Nl+2)+j-1]+lu[i*(Nl+2)+(j+1)]);
     }
       

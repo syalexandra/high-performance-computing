@@ -114,15 +114,15 @@ int main(int argc, char * argv[]){
     for(int i=0;i<Nl;i++){
         leftout[i]=lunew[(i+1)*(Nl+2)+1];
         rightout[i]=lunew[(i+1)*(Nl+2)+Nl];
-        printf("%f",leftout[i]);
     }
-      printf("\n");
         
     if(mpirankY<psqrt-1){
         MPI_Send(&(rightout[0]), Nl, MPI_DOUBLE, mpirank+1, 125, MPI_COMM_WORLD);
         MPI_Recv(&(rightin[0]), Nl, MPI_DOUBLE, mpirank+1, 126, MPI_COMM_WORLD, &status2);
         
     }
+      
+      
 
     if(mpirankY>0){
         MPI_Send(&(leftout[0]), Nl, MPI_DOUBLE, mpirank-1, 126, MPI_COMM_WORLD);
@@ -130,9 +130,11 @@ int main(int argc, char * argv[]){
     }
       
     for(int i=0;i<Nl;i++){
+        printf("%f ",leftin[i]);
         lunew[(i+1)*(Nl+2)]=leftin[i];
         lunew[(i+1)*(Nl+2)+Nl+1]=rightin[i];
     }
+      printf("\n");
       
       
       

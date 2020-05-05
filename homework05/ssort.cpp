@@ -178,7 +178,7 @@ int main( int argc, char *argv[]) {
         return 1;
       }
 
-      for(n = 0; n <recv_length; ++n)
+      for(int n = 0; n <recv_length; ++n)
         fprintf(fd, "  %f\n", buffer_recv[n]);
 
       fclose(fd);

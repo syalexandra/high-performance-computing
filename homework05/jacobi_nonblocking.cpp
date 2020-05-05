@@ -108,13 +108,13 @@ int main(int argc, char * argv[]){
     /* communicate ghost values */
     if (mpirankX < psqrt - 1) {
       /* If not the last process, send/recv bdry values to the right */
-      MPI_ISend(&(lunew[Nl*(Nl+2)+1]), Nl, MPI_DOUBLE, mpirank+psqrt, 124, MPI_COMM_WORLD,&request);
-      MPI_IRecv(&(lunew[(Nl+1)*(Nl+2)+1]), Nl, MPI_DOUBLE, mpirank+psqrt, 123, MPI_COMM_WORLD, &request1);
+      MPI_Isend(&(lunew[Nl*(Nl+2)+1]), Nl, MPI_DOUBLE, mpirank+psqrt, 124, MPI_COMM_WORLD,&request);
+      MPI_Irecv(&(lunew[(Nl+1)*(Nl+2)+1]), Nl, MPI_DOUBLE, mpirank+psqrt, 123, MPI_COMM_WORLD, &request1);
     }
     if (mpirankX > 0) {
       /* If not the first process, send/recv bdry values to the left */
-      MPI_ISend(&(lunew[1+(Nl+2)*1]), Nl, MPI_DOUBLE, mpirank-psqrt, 123, MPI_COMM_WORLD,&request2);
-      MPI_IRecv(&(lunew[1]), Nl, MPI_DOUBLE, mpirank-psqrt, 124, MPI_COMM_WORLD, &request3);
+      MPI_Isend(&(lunew[1+(Nl+2)*1]), Nl, MPI_DOUBLE, mpirank-psqrt, 123, MPI_COMM_WORLD,&request2);
+      MPI_Irecv(&(lunew[1]), Nl, MPI_DOUBLE, mpirank-psqrt, 124, MPI_COMM_WORLD, &request3);
     }
       
       
@@ -130,8 +130,8 @@ int main(int argc, char * argv[]){
             rightout[i]=lunew[(i+1)*(Nl+2)+Nl];
         }
         */
-        MPI_ISend(&(rightout[0]), Nl, MPI_DOUBLE, mpirank+1, 224, MPI_COMM_WORLD,&request4);
-        MPI_IRecv(&(rightin[0]), Nl, MPI_DOUBLE, mpirank+1, 223, MPI_COMM_WORLD, &request5);
+        MPI_Isend(&(rightout[0]), Nl, MPI_DOUBLE, mpirank+1, 224, MPI_COMM_WORLD,&request4);
+        MPI_Irecv(&(rightin[0]), Nl, MPI_DOUBLE, mpirank+1, 223, MPI_COMM_WORLD, &request5);
         for(int i=0;i<Nl;i++){
             lunew[(i+1)*(Nl+2)+Nl+1]=rightin[i];
         }
@@ -145,8 +145,8 @@ int main(int argc, char * argv[]){
             leftout[i]=lunew[(i+1)*(Nl+2)+1];
         }
         */
-        MPI_ISend(&(leftout[0]), Nl, MPI_DOUBLE, mpirank-1, 223, MPI_COMM_WORLD,&request6);
-        MPI_IRecv(&(leftin[0]), Nl, MPI_DOUBLE, mpirank-1, 224, MPI_COMM_WORLD, &request7);
+        MPI_Isend(&(leftout[0]), Nl, MPI_DOUBLE, mpirank-1, 223, MPI_COMM_WORLD,&request6);
+        MPI_Irecv(&(leftin[0]), Nl, MPI_DOUBLE, mpirank-1, 224, MPI_COMM_WORLD, &request7);
         for(int i=0;i<Nl;i++){
             lunew[(i+1)*(Nl+2)]=leftin[i];
         }

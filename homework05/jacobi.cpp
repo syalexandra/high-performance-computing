@@ -146,7 +146,7 @@ int main(int argc, char * argv[]){
     //if (0 == (iter % 10)) {
       gres = compute_residual(lu, Nl, invhsq);
       for(int i=0;i<Nl;i++){
-          for(int =0;j<Nl;j++){
+          for(int j=0;j<Nl;j++){
               printf("%f",lu[i*(Nl+2)+j]);
           }
           printf("\n");

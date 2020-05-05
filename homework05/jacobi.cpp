@@ -65,14 +65,14 @@ int main(int argc, char * argv[]){
   double tt = MPI_Wtime();
     
   /* Allocation of vectors, including left/upper and right/lower ghost points */
-  double * lu    = (double *) malloc(sizeof(double), (Nl + 2)*(Nl + 2));
-  double * lunew = (double *) malloc(sizeof(double), (Nl+ 2)*(Nl+ 2));
+  double * lu    = (double *) malloc((Nl + 2)*(Nl + 2)*sizeof(double));
+  double * lunew = (double *) malloc((Nl+ 2)*(Nl+ 2)*sizeof(double));
   double * lutemp;
     
-    double * leftin = (double *) malloc(sizeof(double), Nl);
-     double * rightin = (double *) malloc(sizeof(double), Nl);
-     double * leftout = (double *) malloc(sizeof(double), Nl);
-     double * rightout = (double *) malloc(sizeof(double), Nl);
+    double * leftin = (double *) malloc(Nl*sizeof(double));
+     double * rightin = (double *) malloc(sizeof(double)* Nl);
+     double * leftout = (double *) malloc(sizeof(double)*Nl);
+     double * rightout = (double *) malloc(sizeof(double)*Nl);
 
     
     

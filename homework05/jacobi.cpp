@@ -145,10 +145,10 @@ int main(int argc, char * argv[]){
     lutemp = lu; lu = lunew; lunew = lutemp;
     //if (0 == (iter % 10)) {
       gres = compute_residual(lu, Nl, invhsq);
-      printf("%d rank %d\n",iter,mpirank);
-      for(int i=0;i<Nl;i++){
-          for(int j=0;j<Nl;j++){
-              printf("%f",lu[i*(Nl+2)+j]);
+      printf("iteration %d\n",iter);
+      for(int i=0;i<Nl+2;i++){
+          for(int j=0;j<Nl+2;j++){
+              printf("%d,%d,%d,%f",mpirank,i,j,lu[i*(Nl+2)+j]);
           }
           printf("\n");
       }

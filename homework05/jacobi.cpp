@@ -90,7 +90,9 @@ int main(int argc, char * argv[]){
 
     /* Jacobi step for local points */
     for (int i = 1; i <= Nl; i++){
-      lunew[i]  = 0.25 * (hsq + lu[(i - 1)*(Nl+2)+j] + lu[(i + 1)*(Nl+2)+j]+lu[i*(Nl+2)+j-1]+lu[i*(Nl+2)+(j+1)]);
+        for(int k=1;k<=Nl;k++){
+            lunew[i*(Nl+2)+k]  = 0.25 * (hsq + lu[(i - 1)*(Nl+2)+k] + lu[(i + 1)*(Nl+2)+k]+lu[i*(Nl+2)+k-1]+lu[i*(Nl+2)+(k+1)]);
+        }
     }
       
       int psqrt=sqrt(p);
@@ -130,11 +132,9 @@ int main(int argc, char * argv[]){
     }
       
     for(int i=0;i<Nl;i++){
-        printf("%f ",leftin[i]);
         lunew[(i+1)*(Nl+2)]=leftin[i];
         lunew[(i+1)*(Nl+2)+Nl+1]=rightin[i];
     }
-      printf("\n");
       
       
       

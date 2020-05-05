@@ -93,7 +93,7 @@ int main() {
     cudaMemcpy(z, z_d, Nb*sizeof(double), cudaMemcpyDeviceToHost);
     double summ=0;
     for(int i=0;i<Nb;i++){
-        summ+=z[i];
+        summ+=z_d[i];
     }
     printf("sum: %f",summ);
     printf("GPU Bandwidth = %f GB/s\n", (N)*sizeof(double) / (omp_get_wtime()-tt)/1e9);

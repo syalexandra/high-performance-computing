@@ -13,12 +13,13 @@ double compute_residual(double *lu, int lN, double invhsq){
   int i,j;
   double tmp, gres = 0.0, lres = 0.0;
     
-  for(j=1;j<=lN;j++){
-      for (i = 1; i <= lN; i++){
+  for(i=1;i<=lN;i++){
+      for (j = 1; j <= lN; j++){
           tmp = ((4.0*lu[i*(lN+2)+j] - lu[(i-1)*(lN+2)+j] - lu[(i+1)*(lN+2)+j-1] - lu[i*(lN+2)+j+1])* invhsq - 1);
           lres += tmp * tmp;
       }
   }
+    printf("les: %f",lres);
   /* use allreduce for convenience; a reduce would also be sufficient */
   MPI_Allreduce(&lres, &gres, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
   return sqrt(gres);
@@ -56,7 +57,6 @@ int main(int argc, char * argv[]){
             j+=1;
         }
     }
-    printf("j %d : \n",j);
     
     N=(1<<j)*Nl;
     

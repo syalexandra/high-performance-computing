@@ -14,7 +14,7 @@ int main( int argc, char *argv[]) {
 
   // Number of random numbers per processor (this should be increased
   // for actual tests or could be passed in through the command line
-  int N = 100;
+  int N = 10;
 
   int* vec = (int*)malloc(N*sizeof(int));
   // seed random number generator differently on every core
@@ -151,16 +151,20 @@ int main( int argc, char *argv[]) {
         }
         recv_length+=recvcounts[i];
     }
-    printf("rank %d length of receive %d:",rank,recv_length);
+    printf("rank %d length of receive %d:\n",rank,recv_length);
     
     int* buffer_recv=(int*)malloc(recv_length*sizeof(int));
     
     MPI_Alltoallv(vec,scounts,sdispls,MPI_INT,buffer_recv,recvcounts,rdispls,MPI_INT,MPI_COMM_WORLD);
     
+    std::sort(buffer_recv,buffer_recv+recv_length);
+    
     printf("rank %d : ",rank);
     for(int i=0;i<recv_length;i++){
         printf("%d ",buffer_recv[i]);
     }
+    
+    printf("\n");
     
   // send and receive: first use an MPI_Alltoall to share with every
   // process how many integers it should expect, and then use

@@ -113,15 +113,12 @@ int main(int argc, char * argv[]){
       MPI_Recv(&(lunew[1]), Nl, MPI_DOUBLE, mpirank-psqrt, 124, MPI_COMM_WORLD, &status1);
     }
       
-      printf("rank %d ",mpirank);
-    for(int i=0;i<Nl;i++){
-        leftout[i]=lunew[(i+1)*(Nl+2)+1];
-        rightout[i]=lunew[(i+1)*(Nl+2)+Nl];
-        printf("%f ",leftout[i]);
-    }
-      printf("\n");
        
     if(mpirankY<psqrt-1){
+        
+        for(int i=0;i<Nl;i++){
+            rightout[i]=lunew[(i+1)*(Nl+2)+Nl];
+        }
         MPI_Send(&(rightout[0]), Nl, MPI_DOUBLE, mpirank+1, 125, MPI_COMM_WORLD);
         MPI_Recv(&(rightin[0]), Nl, MPI_DOUBLE, mpirank+1, 126, MPI_COMM_WORLD, &status2);
         for(int i=0;i<Nl;i++){
@@ -132,13 +129,16 @@ int main(int argc, char * argv[]){
       
 
     if(mpirankY>0){
+        for(int i=0;i<Nl;i++){
+            leftout[i]=lunew[(i+1)*(Nl+2)+1];
+        }
         MPI_Send(&(leftout[0]), Nl, MPI_DOUBLE, mpirank-1, 126, MPI_COMM_WORLD);
         MPI_Recv(&(leftin[0]), Nl, MPI_DOUBLE, mpirank-1, 125, MPI_COMM_WORLD, &status3);
         for(int i=0;i<Nl;i++){
             lunew[(i+1)*(Nl+2)]=leftin[i];
         }
     }
-      MPI_Barrier(MPI_COMM_WORLD);
+      //MPI_Barrier(MPI_COMM_WORLD);
       
       
     /* copy newu to u using pointer flipping */

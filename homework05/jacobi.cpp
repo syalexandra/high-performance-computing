@@ -75,8 +75,8 @@ int main(int argc, char * argv[]){
      double * rightout = (double *) calloc(Nl,sizeof(double));
 
     
-    
-  double h = 1.0 / (N + 1);
+  int psqrt=sqrt(p);
+  double h = 1.0 / (Nl*psqrt + 1);
   double hsq = h * h;
   double invhsq = 1./hsq;
   double gres, gres0, tol = 1e-5;
@@ -99,7 +99,7 @@ int main(int argc, char * argv[]){
       gres =compute_residual(lunew, Nl, invhsq);
       //printf("%f \n",gres);
       
-      int psqrt=sqrt(p);
+      
       int mpirankX=mpirank /psqrt;
       int mpirankY=mpirank % psqrt;
       

@@ -39,9 +39,9 @@ int main(int argc, char * argv[]){
   MPI_Get_processor_name(processor_name, &name_len);
   printf("Rank %d/%d running on %s.\n", mpirank, p, processor_name);
     
-    printf("Nl: \n");
+    //printf("Nl: \n");
   sscanf(argv[1], "%d", &Nl);
-    printf("max_iteration: \n");
+    //printf("max_iteration: \n");
   sscanf(argv[2], "%d", &max_iters);
 
   /* compute number of unknowns handled by each process */
@@ -114,8 +114,9 @@ int main(int argc, char * argv[]){
     for(int i=0;i<Nl;i++){
         leftout[i]=lunew[(i+1)*(Nl+2)+1];
         rightout[i]=lunew[(i+1)*(Nl+2)+Nl];
+        printf("%f",leftout[i]);
     }
-    
+      printf("\n");
         
     if(mpirankY<psqrt-1){
         MPI_Send(&(rightout[0]), Nl, MPI_DOUBLE, mpirank+1, 125, MPI_COMM_WORLD);
@@ -125,7 +126,7 @@ int main(int argc, char * argv[]){
 
     if(mpirankY>0){
         MPI_Send(&(leftout[0]), Nl, MPI_DOUBLE, mpirank-1, 126, MPI_COMM_WORLD);
-        MPI_Recv(&(leftin[0]), Nl, MPI_DOUBLE, mpirank-1, 125, MPI_COMM_WORLD, &status2);
+        MPI_Recv(&(leftin[0]), Nl, MPI_DOUBLE, mpirank-1, 125, MPI_COMM_WORLD, &status3);
     }
       
     for(int i=0;i<Nl;i++){
